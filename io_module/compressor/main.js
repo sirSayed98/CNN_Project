@@ -1,11 +1,8 @@
 const fs = require("fs");
-const RLE = require("run-length-encoder-decoder");
 let arr = [];
 let str = ``;
-let result = ``;
 let splittedResult;
 let finalResult = [];
-
 
 function dec2bin(dec) {
   return Number(dec).toString(2);
@@ -39,19 +36,28 @@ function finalFormat(splitArr) {
   mergeAndWirte(finalResult, process.argv[3]);
 }
 
+function RLE(binString) {
+  let lastLetter, currentCount;
+  let output = "";
+  lastLetter = binString[0];
+  currentCount = 1;
+  for (let i = 1; i < binString.length + 1; i++) {
+    if (binString[i] !== lastLetter) {
+      output += lastLetter + currentCount + "/";
+      lastLetter = binString[i];
+      currentCount = 1;
+    } else currentCount++;
+  }
+  return output;
+}
 fs.readFile(process.argv[2], (err, data) => {
   arr = [...data];
   arr.map((el) => {
     str += dec2bin(el);
   });
-  RLE.encoder(str, (err, res) => {
-    if (err) {
-      console.log(err);
-    } else {
-      result = res;
-      splittedResult = result.split("/");
-      splittedResult.pop(); //remove space (last element)
-      finalFormat(splittedResult);
-    }
-  });
+
+  str = RLE(str);
+  splittedResult = str.split("/");
+  splittedResult.pop(); //remove space (last element)
+  finalFormat(splittedResult);
 });
