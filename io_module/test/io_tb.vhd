@@ -29,7 +29,8 @@ component io is
 end component;
  
 -----------------------------------Signals-------------------------------------
-file file_VECTORS : text;
+file image_file : text;
+file kernal_file : text;
 
 constant PERIOD : time := 100 ps;
 
@@ -86,20 +87,53 @@ begin
     variable v_packet : std_logic_vector(15 downto 0);
   begin
     wait for PERIOD;
-
-    file_open(file_VECTORS, "file.txt",  read_mode);
+    
+    --send image
+    file_open(image_file, "image.txt",  read_mode);
  
-    while not endfile(file_VECTORS) loop
-      readline(file_VECTORS, v_line);
+    img_cnn <= '1';
+    while not endfile(image_file) loop
+      readline(image_file, v_line);
       read(v_line, v_packet);
  
       din <= v_packet;
- 
-      wait for PERIOD;
+      load_process <= '1';
+      interrupt <= '1';
+
+      wait for PERIOD; --wait for at least a period
+      wait until done = '1';
     end loop;
  
-    file_close(file_VECTORS);
+    file_close(image_file);
 
+    --send kernals
+    file_open(kernal_file, "kernal.txt",  read_mode);
+ 
+    img_cnn <= '0';
+    while not endfile(kernal_file) loop
+      readline(kernal_file, v_line);
+      read(v_line, v_packet);
+ 
+      din <= v_packet;
+      load_process <= '1';
+      interrupt <= '1';
+
+      wait for PERIOD; --wait for at least a period
+      wait until done = '1';
+    end loop;
+ 
+    file_close(kernal_file);
+
+    --process
+    load_process <= '0';
+    interrupt <= '1';
+    wait for PERIOD; --wait for at least a period
+    wait until done = '1';
+
+    --assert
+    --TODO
+    
+    ---------------------------------------------
     finish_sim <= '1'; --stop simulation
     wait;
   end process;
