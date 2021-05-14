@@ -1,0 +1,107 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use std.textio.all;
+use ieee.std_logic_textio.all;
+ 
+entity io_tb is
+end io_tb;
+ 
+architecture io_tb_0 of io_tb is
+ 
+-----------------------------------Declarations--------------------------------
+component io is
+  generic (
+    RAM_WORD_SIZE : integer := 8;
+    RAM_ADDRESS_SIZE : integer := 10
+    );
+  port(
+    clk : in std_logic;
+    rst : in std_logic;
+    interrupt : in std_logic;
+    load_process : in std_logic;
+    img_cnn : in std_logic;
+    done : out std_logic;
+
+    din : in std_logic_vector(15 downto 0);
+    dout : out std_logic_vector(3 downto 0)
+    );  
+end component;
+ 
+-----------------------------------Signals-------------------------------------
+file file_VECTORS : text;
+
+constant PERIOD : time := 100 ps;
+
+signal clk : std_logic := '1';
+signal rst : std_logic;
+signal interrupt : std_logic;
+signal load_process : std_logic;
+signal img_cnn : std_logic;
+signal done : std_logic;
+signal din : std_logic_vector(15 downto 0);
+signal dout : std_logic_vector(3 downto 0);
+   
+signal finish_sim : std_logic := '0';
+
+begin
+ 
+  -------------------------Instantiate and Map UUT-----------------------------
+  IO_INST : io
+    port map (
+      clk,
+      rst,
+      interrupt,
+      load_process,
+      img_cnn,
+      done,
+      din,
+      dout
+      );
+ 
+ 
+  --clk 
+  process 
+  begin
+    clk <= not clk; 
+    wait for PERIOD/2;
+    
+    if finish_sim = '1' then
+      wait;
+    end if;
+  end process;
+
+  --reset 
+  process 
+  begin
+    rst <= '1'; 
+    wait for PERIOD;
+    rst <= '0'; 
+    wait;
+  end process;
+
+  ---stimuli
+  process
+    variable v_line     : line;
+    variable v_packet : std_logic_vector(15 downto 0);
+  begin
+    wait for PERIOD;
+
+    file_open(file_VECTORS, "file.txt",  read_mode);
+ 
+    while not endfile(file_VECTORS) loop
+      readline(file_VECTORS, v_line);
+      read(v_line, v_packet);
+ 
+      din <= v_packet;
+ 
+      wait for PERIOD;
+    end loop;
+ 
+    file_close(file_VECTORS);
+
+    finish_sim <= '1'; --stop simulation
+    wait;
+  end process;
+ 
+end io_tb_0;
