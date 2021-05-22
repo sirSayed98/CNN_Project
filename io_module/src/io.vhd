@@ -7,7 +7,7 @@ use ieee.numeric_std.all;
 
 entity io is
   generic (
-    RAM_WORD_SIZE : integer := 8;
+    RAM_WORD_SIZE : integer := 16;
     RAM_ADDRESS_SIZE : integer := 10
     );
   port(
@@ -114,8 +114,8 @@ constant KERNALS_SIZE : integer := 200;
 signal num_count_z : std_logic;
 signal num_count_dec : std_logic;
 signal num_count_load : std_logic;
-signal num_count_input : std_logic_vector(3 downto 0);
-signal num_count_output : std_logic_vector(3 downto 0);
+signal num_count_input : std_logic_vector(4 downto 0);
+signal num_count_output : std_logic_vector(4 downto 0);
 
 signal data_count_z : std_logic;
 signal data_count_dec : std_logic;
@@ -269,8 +269,8 @@ begin
 
   end process;
   
-  ------------------------------------Byte Counter-----------------------------
-  num_count : decCounter generic map (4) 
+  ------------------------------------Word Counter-----------------------------
+  num_count : decCounter generic map (5) 
   port map (clk, rst, num_count_dec, num_count_load, num_count_z, 
   num_count_output, num_count_input);
 
