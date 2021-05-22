@@ -8,3 +8,66 @@ z2
 !i10f 100
 cModel Technology
 dD:/3rd-year-2nd semster/VLSI/project/code
+Eram
+Z0 w1621669172
+Z1 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+Z2 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z3 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
+Z4 dD:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module
+Z5 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/ram.vhd
+Z6 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/ram.vhd
+l0
+L5
+V8R?mMNK<o:mZ7Yf8OOX1h0
+!s100 B?QH0EN1zA8SDY]fc8LCS2
+Z7 OL;C;10.5;63
+32
+Z8 !s110 1621689205
+!i10b 1
+Z9 !s108 1621689205.000000
+Z10 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/ram.vhd|
+Z11 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/ram.vhd|
+!i113 0
+Z12 o-work work -2002 -explicit
+Z13 tExplicit 1 CvgOpt 0
+Asyncrama
+R1
+R2
+R3
+Z14 DEx4 work 3 ram 0 22 8R?mMNK<o:mZ7Yf8OOX1h0
+l24
+L19
+Z15 VG_YG5FYXJ[bYhI154]`;V2
+Z16 !s100 eOV=6^Io>bA0Q7MXaN]MD0
+R7
+32
+R8
+!i10b 1
+R9
+R10
+R11
+!i113 0
+R12
+R13
+Esystem
+w1621689203
+R1
+R2
+R3
+R4
+8D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/system.vhd
+FD:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/system.vhd
+l0
+L6
+Vcmk9JQHZG1RoPi<03PT=B0
+!s100 zW85Fe=S`V;bb1[0M[3502
+R7
+32
+Z17 !s110 1621689204
+!i10b 1
+Z18 !s108 1621689204.000000
+!s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/system.vhd|
+!s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/system.vhd|
+!i113 0
+R12
+R13
