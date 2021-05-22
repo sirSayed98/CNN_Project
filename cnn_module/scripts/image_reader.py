@@ -16,5 +16,4 @@ for row in img:
 file_out = open(img_out_file, 'w')
 for i, line in enumerate(lines):
     file_out.write(line + ("\n" if i != len(lines) - 1 else ""))
-# file_out.writelines(lines)
 file_out.close()
