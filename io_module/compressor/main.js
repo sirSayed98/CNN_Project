@@ -3,7 +3,10 @@ let arr = [];
 let str = ``;
 let splittedResult;
 let finalResult = [];
+
 const IMG_CHOICE = 1;
+const FILTER_CHOICE = 2;
+
 function dec2bin(dec) {
   return Number(dec).toString(2);
 }
@@ -65,7 +68,31 @@ function readImg(imgPath, output) {
   });
 }
 
-if (process.argv[2] == IMG_CHOICE) {
-  readImg(process.argv[3],process.argv[4])
-}
+function readFilters(argArr) {
+  [1, 2, 3].forEach((el) => {
+    argArr.shift();
+  });
 
+  var compine_filters = [];
+
+  argArr.forEach((file) => {
+    var text = fs
+      .readFileSync(file)
+      .toString("utf-8")
+      .replace(/\r?\n|\r/g, " ");
+
+    text = text.split(" ");
+    compine_filters = compine_filters.concat(text);
+  });
+  console.log(compine_filters);
+}
+switch (parseInt(process.argv[2])) {
+  case IMG_CHOICE:
+    readImg(process.argv[3], process.argv[4]);
+    break;
+  case FILTER_CHOICE:
+    readFilters(process.argv);
+    break;
+  default:
+    break;
+}
