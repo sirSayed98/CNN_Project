@@ -4,6 +4,9 @@ let str = ``;
 let splittedResult;
 let finalResult = [];
 
+const IMG_CHOICE = 1;
+const FILTER_CHOICE = 2;
+
 function dec2bin(dec) {
   return Number(dec).toString(2);
 }
@@ -21,7 +24,7 @@ function mergeAndWirte(arr, fileName) {
   fs.writeFileSync(fileName, text, "utf8");
 }
 
-function finalFormat(splitArr) {
+function finalFormat(splitArr, output) {
   for (let index = 0; index < splitArr.length; index++) {
     var indicator = splitArr[index][0];
     var run = parseInt(splitArr[index].substring(1));
@@ -33,7 +36,7 @@ function finalFormat(splitArr) {
     var correctedRun = new Array(8 - binRun.length).join("0") + binRun;
     finalResult.push(indicator + correctedRun);
   }
-  mergeAndWirte(finalResult, process.argv[3]);
+  mergeAndWirte(finalResult, output);
 }
 
 function RLE(binString) {
@@ -50,14 +53,46 @@ function RLE(binString) {
   }
   return output;
 }
-fs.readFile(process.argv[2], (err, data) => {
-  arr = [...data];
-  arr.map((el) => {
-    str += dec2bin(el);
+
+function readImg(imgPath, output) {
+  fs.readFile(imgPath, (err, data) => {
+    arr = [...data];
+    arr.map((el) => {
+      str += dec2bin(el);
+    });
+
+    str = RLE(str);
+    splittedResult = str.split("/");
+    splittedResult.pop(); //remove space (last element)
+    finalFormat(splittedResult, output);
+  });
+}
+
+function readFilters(argArr) {
+  [1, 2, 3].forEach((el) => {
+    argArr.shift();
   });
 
-  str = RLE(str);
-  splittedResult = str.split("/");
-  splittedResult.pop(); //remove space (last element)
-  finalFormat(splittedResult);
-});
+  var compine_filters = [];
+
+  argArr.forEach((file) => {
+    var text = fs
+      .readFileSync(file)
+      .toString("utf-8")
+      .replace(/\r?\n|\r/g, " ");
+
+    text = text.split(" ");
+    compine_filters = compine_filters.concat(text);
+  });
+  console.log(compine_filters);
+}
+switch (parseInt(process.argv[2])) {
+  case IMG_CHOICE:
+    readImg(process.argv[3], process.argv[4]);
+    break;
+  case FILTER_CHOICE:
+    readFilters(process.argv);
+    break;
+  default:
+    break;
+}
