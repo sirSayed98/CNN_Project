@@ -1,6 +1,7 @@
 module fullyConnected#(
     parameter WORD_SIZE = 16,
-    parameter LAYER_SIZE = 128
+    parameter LAYER_SIZE = 128,
+    parameter INT_SLICE = 8
     )
     (
     output [WORD_SIZE-1 : 0] Z [LAYER_SIZE-1 : 0],
@@ -8,7 +9,7 @@ module fullyConnected#(
     input  [WORD_SIZE-1 : 0] W [LAYER_SIZE-1 : 0][LAYER_SIZE-1 : 0],
     input  [WORD_SIZE-1 : 0] B [LAYER_SIZE-1 : 0]
     );
-
+    parameter DEC_SLICE = WORD_SIZE - INT_SLICE;
 
     reg [WORD_SIZE-1 : 0] res [LAYER_SIZE-1 : 0];
     reg [2*WORD_SIZE-1 : 0] intrmd [LAYER_SIZE-1 : 0][LAYER_SIZE-1 : 0];
@@ -24,11 +25,11 @@ module fullyConnected#(
                 intrmd[i][j] = X[i] * W[i][j];
                 if(intrmd[i][j][WORD_SIZE-1]) begin
                     intrmdinv[i][j] = ~intrmd[i][j] + 1; // 2's compliment
-                    prodinv[i][j] = intrmdinv[i][j][1.5*WORD_SIZE-1 : 0.5*WORD_SIZE];
+                    prodinv[i][j] = intrmdinv[i][j][WORD_SIZE+INT_SLICE-1 : WORD_SIZE-DEC_SLICE];
                     prod[i][j] = ~prodinv[i][j] + 1; // 2's compliment
                 end
                 else begin
-                    prod[i][j] = intrmd[i][j][1.5*WORD_SIZE-1 : 0.5*WORD_SIZE];
+                    prod[i][j] = intrmd[i][j][WORD_SIZE+INT_SLICE-1 : WORD_SIZE-DEC_SLICE];
                 end
                 res[i] = res[i] + prod[i][j];
             end
