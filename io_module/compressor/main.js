@@ -79,7 +79,7 @@ function mergeAndWirte(arr, fileName) {
 
   const res = Array.from(
     { length: arr.length / 2 },
-    (_, i) => arr[2 * i] +  arr[2 * i + 1]
+    (_, i) => arr[2 * i] + arr[2 * i + 1]
   );
   let text = res.join("\n");
   fs.writeFileSync(fileName, text, "utf8");
@@ -115,21 +115,27 @@ function RLE(binString) {
   return output;
 }
 
-function readImg(imgPath, output) {
-  fs.readFile(imgPath, (err, data) => {
-    arr = [...data];
-    arr.map((el) => {
-      str += dec2bin(el);
-    });
+const readImg = async (txtFile, output) => {
+  arr = fs
+    .readFileSync(txtFile)
+    .toString("utf-8")
+    .replace(/\r?\n|\r/g, " ");
 
-    str = RLE(str);
-    splittedResult = str.split("/");
-    splittedResult.pop(); //remove space (last element)
-    finalFormat(splittedResult, output);
+  arr = arr.split(" ");
+  arr.pop()
+  
+  arr.map((el) => {
+    str += float2bin(el);
   });
-}
 
-function readFilters(argArr,output) {
+  str = RLE(str);
+  splittedResult = str.split("/");
+  splittedResult.pop(); 
+  finalFormat(splittedResult, output);
+  
+};
+
+function readFilters(argArr, output) {
   [1, 2, 3].forEach((el) => {
     argArr.shift();
   });
@@ -158,6 +164,7 @@ function readFilters(argArr,output) {
   splittedResult.pop(); //remove space (last element)
   finalFormat(splittedResult, output);
 }
+
 switch (parseInt(process.argv[2])) {
   case IMG_CHOICE:
     readImg(process.argv[3], process.argv[4]);
