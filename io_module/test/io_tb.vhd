@@ -12,7 +12,7 @@ architecture io_tb_0 of io_tb is
 -----------------------------------Declarations--------------------------------
 component io is
   generic (
-    RAM_WORD_SIZE : integer := 8;
+    RAM_WORD_SIZE : integer := 16;
     RAM_ADDRESS_SIZE : integer := 10
     );
   port(
@@ -125,10 +125,10 @@ begin
     file_close(kernal_file);
 
     --process
-    load_process <= '0';
-    interrupt <= '1';
-    wait for PERIOD; --wait for at least a period
-    wait until done = '1';
+    --load_process <= '0';
+    --interrupt <= '1';
+    --wait for PERIOD; --wait for at least a period
+    --wait until done = '1';
 
     --assert
     --TODO
