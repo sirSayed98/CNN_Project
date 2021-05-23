@@ -1,40 +1,48 @@
 library ieee;
 use ieee.std_logic_1164.all;
-use IEEE.std_logic_unsigned.all;
+use ieee.numeric_std.all;
 Entity poolingFloat is
 	generic(
 		WINDOWSIZE : integer := 3
 	);
 	port(
-	size : in integer;
-	window : in std_logic_vector(WINDOWSIZE*WINDOWSIZE*16-1 downto 0);
-	sum : out std_logic_vector(15 downto 0)
+	window : in signed(WINDOWSIZE*WINDOWSIZE*16-1 downto 0);
+	sum : out signed(15 downto 0)
 	);
 end entity;
 
 ARCHITECTURE Pool_arc of poolingFloat is 
 
-function average (s : integer; w : std_logic_vector)return std_logic_vector is
-variable result : std_logic_vector(15 downto 0):= (others => '0');
+function average (s : integer; w : signed)return signed is
+variable result : signed(16 downto 0):= (others => '0');
 
 begin
 	
-for i in 0 to s*s-1 loop
-	result := result + w(((i+1)*16-1)downto((i+1)*16-16));
+for i in 0 to WINDOWSIZE*WINDOWSIZE-1 loop
+	-- cocant w in add with w of ((i+1)*16-1)
+	result := result + (w((i+1)*16-1) & w(((i+1)*16-1)downto((i+1)*16-16)));
+	if(to_integer(result(16 downto 11)) > 15) then 
+		result := (others=>'1');
+		result(16 downto 15) := "00";
+	end if;
+	if(to_integer(result(16 downto 11)) < -16) then
+		result := (others=>'1');
+		result(10 downto 0) := (others=>'0');
+	end if;
 end loop;
 
 if s = 3 then
-	result := (result(15)&result(15)&result(15)) & result(15 downto 3);
-else    result := (result(15)&result(15)&result(15)&result(15)&result(15)) & result(15 downto 5);
+	result := "0"&(result(15)&result(15)&result(15)) & result(15 downto 3);
+else    result := "0"&(result(15)&result(15)&result(15)&result(15)&result(15)) & result(15 downto 5);
 end if;
 
-return result;
+return result(15 downto 0);
 
 end function;
 
 
 begin
 
-sum <= average(size , window);
+sum <= average(WINDOWSIZE , window);
 
 end ARCHITECTURE;
