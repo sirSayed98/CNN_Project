@@ -12,7 +12,29 @@ module softmax_tb # ( parameter WORD_SIZE = 16, LAYER_SIZE = 10, TEST_CASES_NUM 
     // reg [8:0] vectornum, errors; // bookkeeping variables
     // reg [15:0] testvectors[255:0];// array of testvectors
     // instantiate device under test
-    softMax #(WORD_SIZE, LAYER_SIZE) max(.X(input_layer), .Z(circuit_output));
+
+
+    wire  [WORD_SIZE-1:0] input_layer_wire [LAYER_SIZE-1:0]; 
+
+//
+    assign input_layer_wire = input_layer;
+// remove
+
+    
+    //resultBuffer = {(N*2){1'b0}};
+    softMax #(WORD_SIZE, LAYER_SIZE) mySoftmax(.Z(circuit_output), .X(input_layer));
+    /*softMax #(WORD_SIZE, LAYER_SIZE) mySoftmax(.Z(circuit_output),.X({
+        {16'b1010101010111111},
+        {16'b1010101010110111},
+        {16'b1010101010110111},
+        {16'b1010101010101111},
+        {16'b1010101010111111},
+        {16'b1010101010111011},
+        {16'b1010101010111111},
+        {16'b1010101010011111},
+        {16'b1010101010101111},
+        {16'b1010101010110111}
+    }));*/
     // generate clock
     always // no sensitivity list, so it always executes
     begin
@@ -23,9 +45,9 @@ module softmax_tb # ( parameter WORD_SIZE = 16, LAYER_SIZE = 10, TEST_CASES_NUM 
     // and pulse reset
     initial // Will execute at the beginning once
         begin
-        $readmemb("generated_cases_softmax.tv", testvectors); // Read vectors
+        $readmemb("generated_cases_softmax_rand.tv", testvectors); // Read vectors
         vectornum = 0; errors = 0; // Initialize 
-        reset = 1; #27; reset = 0; // Apply reset wait
+        reset = 1; #1; reset = 0; // Apply reset wait
     end
 
     integer k;
@@ -39,9 +61,26 @@ module softmax_tb # ( parameter WORD_SIZE = 16, LAYER_SIZE = 10, TEST_CASES_NUM 
         
         resultExpected = testvectors[vectornum][$clog2(LAYER_SIZE)-1:0];
         
+      
+
+        
         for(k = LAYER_SIZE-1; k >= 0; k = k - 1) begin
-            input_layer[k] = testvectors[vectornum][(LAYER_SIZE*WORD_SIZE + $clog2(LAYER_SIZE))-1:WORD_SIZE];
+            input_layer[k] = testvectors[vectornum][((k+1)*WORD_SIZE + $clog2(LAYER_SIZE))-1 -: WORD_SIZE];
+            //((k+1)*WORD_SIZE + $clog2(LAYER_SIZE))-1 : ((k+1)*WORD_SIZE + $clog2(LAYER_SIZE))-1 - WORD_SIZE
         end
+
+        //#1; 
+
+        // input_layer[0] = testvectors[vectornum][((0+1)*WORD_SIZE + $clog2(LAYER_SIZE))-1 -: WORD_SIZE];
+        // input_layer[1] = testvectors[vectornum][((1+1)*WORD_SIZE + $clog2(LAYER_SIZE))-1 -: WORD_SIZE];
+        // input_layer[2] = testvectors[vectornum][((2+1)*WORD_SIZE + $clog2(LAYER_SIZE))-1 -: WORD_SIZE];
+        // input_layer[3] = testvectors[vectornum][((3+1)*WORD_SIZE + $clog2(LAYER_SIZE))-1 -: WORD_SIZE];
+        // input_layer[4] = testvectors[vectornum][((4+1)*WORD_SIZE + $clog2(LAYER_SIZE))-1 -: WORD_SIZE];
+        // input_layer[5] = testvectors[vectornum][((5+1)*WORD_SIZE + $clog2(LAYER_SIZE))-1 -: WORD_SIZE];
+        // input_layer[6] = testvectors[vectornum][((6+1)*WORD_SIZE + $clog2(LAYER_SIZE))-1 -: WORD_SIZE];
+        // input_layer[7] = testvectors[vectornum][((7+1)*WORD_SIZE + $clog2(LAYER_SIZE))-1 -: WORD_SIZE];
+        // input_layer[8] = testvectors[vectornum][((8+1)*WORD_SIZE + $clog2(LAYER_SIZE))-1 -: WORD_SIZE];
+        // input_layer[9] = testvectors[vectornum][((9+1)*WORD_SIZE + $clog2(LAYER_SIZE))-1 -: WORD_SIZE];
     end
     // check results on falling edge of clk
     always @(negedge clk)
