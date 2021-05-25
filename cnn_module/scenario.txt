@@ -9,7 +9,9 @@ layers = [0,1,2,3,4]
 * max_feature_maps = [6,*,16,*,120] eg. 16 
 * max_depth = [1,*,6,*,16] 	eg. 6
 
-
+intialize {
+current_layer_counter = 0
+}
 
 POOLING 
 // inputs
@@ -19,11 +21,13 @@ POOLING
 * output_size // the output of 1 feature map pooled
 * max_feature_maps // this the number of feature maps of the prevoius conv layer
 					// and the number of output maps from the current
-For feature = 0 : max_feature_maps;
-	Load Input from MemAddr = input_start_address + input_size * feature 
-	OUT_POOL=1
-	store output at MemAddr = output_start_address + output_size*feature
-	OUT_POOL = 0
+
+if layer_type[current_layer_counter] == 1;
+	For feature = 0 : max_feature_maps;
+		Load Input from MemAddr = input_start_address + input_size * feature 
+		OUT_POOL=1
+		store output at MemAddr = output_start_address + output_size*feature
+		OUT_POOL = 0
 
 Convolution 
 // inputs
@@ -35,16 +39,17 @@ Convolution
 * max_feature_maps eg. 16 
 * max_depth 	eg. 6
 
-For feature = 0 : max_feature_maps;
-	reset_accumulator = 1
-	for depth in max_depth;		// now accumulating the result
-		Load Input from MemAddr = input_start_address + input_size * feature 
-		Load Filter from MemAddr = filter_start_address + max_depth * feature + filter_size(eg. 25)
-		reset_acummulator=0	// has no effect when accumulating
-		enable_convolve=0
-		enalble_convolve = 1
-		enable_convolve=0 // now data in buffers
-		
-	store output at MemAddr = output_start_address + output_size*feature
+if layer_type[current_layer_counter] == 0;
+	For feature = 0 : max_feature_maps;
+		reset_accumulator = 1
+		for depth in max_depth;		// now accumulating the result
+			Load Input from MemAddr = input_start_address + input_size * feature 
+			Load Filter from MemAddr = filter_start_address + max_depth * feature + filter_size(eg. 25)
+			reset_acummulator=0	// has no effect when accumulating
+			enable_convolve=0
+			enalble_convolve = 1
+			enable_convolve=0 // now data in buffers
+			
+		store output at MemAddr = output_start_address + output_size*feature
 	
 	
