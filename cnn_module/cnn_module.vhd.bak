@@ -80,23 +80,4 @@ ARCHITECTURE system_arch OF system is
 	Convolute: convolution generic map(5) port map(fil,img_W,convR);
 	-- pooling --
 	Pooling: poolingFloat generic map(5) port map(img_W,poolR);
-
-
-	-- Large Pooling
--- GEN_D_FF:
---     for ROW in 2 to 29 generate
---     begin
---         GEN_D_FF0:
---                 for COL in 2 to 29 generate
---                 begin
---         DFF_X:  
---                     D_FF 
---                     port map(
---                         D_in => WRT_DATA(COL), 
---                         CLK => CLK_vals(ROW), 
---                         Q_out => Q(ROW)(COL), 
---                         QN_out => QN(ROW)(COL)
---                     );
---             end generate;
---     end generate;
 end system_arch;
