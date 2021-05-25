@@ -19,6 +19,9 @@ ARCHITECTURE system_arch OF system is
 	type buffer_type is array(0 TO 2**10-1) OF std_logic_vector(WORDSIZE-1 downto 0);
 	signal buff : buffer_type;
 
+	type ConvResult is array(0 TO 783) OF std_logic_vector(WORDSIZE-1 downto 0);
+	signal conv_result : ConvResult;
+
 
 	component ram is
 		GENERIC (WORDSIZE : integer := 16;
@@ -77,7 +80,7 @@ ARCHITECTURE system_arch OF system is
 	signal poolR: signed(WORDSIZE-1 downto 0);
 	signal fil : signed(WORDSIZE*5*5-1 downto 0);
 	signal img_W : signed(WORDSIZE*5*5-1 downto 0);
-
+    
     function conv (f : signed; w : signed)return signed is
         variable convresult : signed(16 downto 0):= (others => '0');
         variable tmp : signed(31 downto 0):= (others => '0');
@@ -121,39 +124,41 @@ ARCHITECTURE system_arch OF system is
 
 
 	-- Large Pooling
--- GEN_D_FF:
-    for ROW in 0 to 29 generate
+GEN_D_FF:
+    for ROW in 0 to 27 generate
     begin
         GEN_D_FF0:
-                for COL in 0 to 29 generate
+                for COL in 0 to 27 generate
                 begin
 
-                    DFF_X: conv(fil , 
-                    buff(to_integer(unsigned((ROW) * 32 + (COL))))(15 downto 0) &  
-                    buff(to_integer(unsigned((ROW) * 32 + (COL+1))))(15 downto 0) &  
-                    buff(to_integer(unsigned((ROW) * 32 + (COL+2))))(15 downto 0) &  
-                    buff(to_integer(unsigned((ROW) * 32 + (COL+3))))(15 downto 0) &  
-                    buff(to_integer(unsigned((ROW) * 32 + (COL+4))))(15 downto 0) &
-                    buff(to_integer(unsigned((ROW+1) * 32 + (COL))))(15 downto 0) &  
-                    buff(to_integer(unsigned((ROW+1) * 32 + (COL+1))))(15 downto 0) &  
-                    buff(to_integer(unsigned((ROW+1) * 32 + (COL+2))))(15 downto 0) &  
-                    buff(to_integer(unsigned((ROW+1) * 32 + (COL+3))))(15 downto 0) &  
-                    buff(to_integer(unsigned((ROW+1) * 32 + (COL+4))))(15 downto 0) &
-                    buff(to_integer(unsigned((ROW+2) * 32 + (COL))))(15 downto 0) &  
-                    buff(to_integer(unsigned((ROW+2) * 32 + (COL+1))))(15 downto 0) &  
-                    buff(to_integer(unsigned((ROW+2) * 32 + (COL+2))))(15 downto 0) &  
-                    buff(to_integer(unsigned((ROW+2) * 32 + (COL+3))))(15 downto 0) &  
-                    buff(to_integer(unsigned((ROW+2) * 32 + (COL+4))))(15 downto 0) &
-                    buff(to_integer(unsigned((ROW+3) * 32 + (COL))))(15 downto 0) &  
-                    buff(to_integer(unsigned((ROW+3) * 32 + (COL+1))))(15 downto 0) &  
-                    buff(to_integer(unsigned((ROW+3) * 32 + (COL+2))))(15 downto 0) &  
-                    buff(to_integer(unsigned((ROW+3) * 32 + (COL+3))))(15 downto 0) &  
-                    buff(to_integer(unsigned((ROW+3) * 32 + (COL+4))))(15 downto 0) &
-                    buff(to_integer(unsigned((ROW+4) * 32 + (COL))))(15 downto 0) &  
-                    buff(to_integer(unsigned((ROW+4) * 32 + (COL+1))))(15 downto 0) &  
-                    buff(to_integer(unsigned((ROW+4) * 32 + (COL+2))))(15 downto 0) &  
-                    buff(to_integer(unsigned((ROW+4) * 32 + (COL+3))))(15 downto 0) &  
-                    buff(to_integer(unsigned((ROW+4) * 32 + (COL+4))))(15 downto 0)                     
+                    conv_result(ROW * 28 + COL) <= conv(signed(fil) , signed(
+                        buff(to_integer(unsigned((ROW) * 32 + (COL))))(15 downto 0) &  
+                        buff(to_integer(unsigned((ROW) * 32 + (COL+1))))(15 downto 0) &  
+                        buff(to_integer(unsigned((ROW) * 32 + (COL+2))))(15 downto 0) &  
+                        buff(to_integer(unsigned((ROW) * 32 + (COL+3))))(15 downto 0) &  
+                        buff(to_integer(unsigned((ROW) * 32 + (COL+4))))(15 downto 0) &
+                        buff(to_integer(unsigned((ROW+1) * 32 + (COL))))(15 downto 0) &  
+                        buff(to_integer(unsigned((ROW+1) * 32 + (COL+1))))(15 downto 0) &  
+                        buff(to_integer(unsigned((ROW+1) * 32 + (COL+2))))(15 downto 0) &  
+                        buff(to_integer(unsigned((ROW+1) * 32 + (COL+3))))(15 downto 0) &  
+                        buff(to_integer(unsigned((ROW+1) * 32 + (COL+4))))(15 downto 0) &
+                        buff(to_integer(unsigned((ROW+2) * 32 + (COL))))(15 downto 0) &  
+                        buff(to_integer(unsigned((ROW+2) * 32 + (COL+1))))(15 downto 0) &  
+                        buff(to_integer(unsigned((ROW+2) * 32 + (COL+2))))(15 downto 0) &  
+                        buff(to_integer(unsigned((ROW+2) * 32 + (COL+3))))(15 downto 0) &  
+                        buff(to_integer(unsigned((ROW+2) * 32 + (COL+4))))(15 downto 0) &
+                        buff(to_integer(unsigned((ROW+3) * 32 + (COL))))(15 downto 0) &  
+                        buff(to_integer(unsigned((ROW+3) * 32 + (COL+1))))(15 downto 0) &  
+                        buff(to_integer(unsigned((ROW+3) * 32 + (COL+2))))(15 downto 0) &  
+                        buff(to_integer(unsigned((ROW+3) * 32 + (COL+3))))(15 downto 0) &  
+                        buff(to_integer(unsigned((ROW+3) * 32 + (COL+4))))(15 downto 0) &
+                        buff(to_integer(unsigned((ROW+4) * 32 + (COL))))(15 downto 0) &  
+                        buff(to_integer(unsigned((ROW+4) * 32 + (COL+1))))(15 downto 0) &  
+                        buff(to_integer(unsigned((ROW+4) * 32 + (COL+2))))(15 downto 0) &  
+                        buff(to_integer(unsigned((ROW+4) * 32 + (COL+3))))(15 downto 0) &  
+                        buff(to_integer(unsigned((ROW+4) * 32 + (COL+4))))(15 downto 0)     
+                    ) 
+                                    
                     );
                     -- DFF_X: convolution generic map(5) port map(fil,img_W,convR);
 
