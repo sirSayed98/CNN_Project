@@ -1,0 +1,37 @@
+POOLING 
+// inputs
+* input_start_address
+* input_size // this is the input of 2D Image or matrix
+* output_start_address // this the first place to write to the output
+* output_size // the output of 1 feature map pooled
+* max_feature_maps // this the number of feature maps of the prevoius conv layer
+					// and the number of output maps from the current
+For feature = 0 : max_feature_maps;
+	Load Input from MemAddr = input_start_address + input_size * feature 
+	OUT_POOL=1
+	store output at MemAddr = output_start_address + output_size*feature
+	OUT_POOL = 0
+
+Convolution 
+// inputs
+* input_start_address
+* input_size // this is the input of 2D Image or matrix
+* output_start_address // this the first place to write to the output
+* output_size // the output of 1 feature map convolved
+* filter_start_address // the address of the 1st filter
+* max_feature_maps eg. 16 
+* max_depth 	eg. 6
+
+For feature = 0 : max_feature_maps;
+	reset_accumulator = 1
+	for depth in max_depth;		// now accumulating the result
+		Load Input from MemAddr = input_start_address + input_size * feature 
+		Load Filter from MemAddr = filter_start_address + max_depth * feature + filter_size(eg. 25)
+		reset_acummulator=0	// has no effect when accumulating
+		enable_convolve=0
+		enalble_convolve = 1
+		enable_convolve=0 // now data in buffers
+		
+	store output at MemAddr = output_start_address + output_size*feature
+	
+	
