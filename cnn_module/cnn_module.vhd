@@ -5,6 +5,7 @@ use ieee.numeric_std.all;
 entity system is
 	generic(
 		WORDSIZE : integer := 16;
+        WINDOWSIZE : integer := 5;
 		ADDRESS_SIZE : integer := 16
 		);
 	port(
@@ -14,6 +15,11 @@ entity system is
 end entity system;
 
 ARCHITECTURE system_arch OF system is
+    
+	type buffer_type is array(0 TO 2**10-1) OF std_logic_vector(WORDSIZE-1 downto 0);
+	signal buff : buffer_type;
+
+
 	component ram is
 		GENERIC (WORDSIZE : integer := 16;
 				ADDRESS_SIZE : integer := 16
@@ -71,6 +77,38 @@ ARCHITECTURE system_arch OF system is
 	signal poolR: signed(WORDSIZE-1 downto 0);
 	signal fil : signed(WORDSIZE*5*5-1 downto 0);
 	signal img_W : signed(WORDSIZE*5*5-1 downto 0);
+
+    function conv (f : signed; w : signed)return signed is
+        variable convresult : signed(16 downto 0):= (others => '0');
+        variable tmp : signed(31 downto 0):= (others => '0');
+        begin
+            
+        for i in 0 to WINDOWSIZE*WINDOWSIZE-1 loop
+            tmp := (f((i+1)*16-1 downto i*16)) * (w((i+1)*16-1 downto i*16));
+            if(to_integer(tmp(31 downto 22)) > 15) then 
+                tmp := (others=>'1');
+                tmp(31 downto 26) := (others=>'0');
+            end if;
+            if(to_integer(tmp(31 downto 22)) < -16) then
+                tmp := (others=>'1');
+                tmp(21 downto 0) := (others=>'0');
+            end if;
+            convresult := convresult + (tmp(26)&(tmp(26 downto 11)));
+            if(to_integer(convresult(16 downto 11)) > 15) then 
+                convresult := (others=>'1');
+                convresult(16 downto 15) := "00";
+            end if;
+            if(to_integer(convresult(16 downto 11)) < -16) then
+                convresult := (others=>'1');
+                convresult(10 downto 0) := (others=>'0');
+            end if;
+        end loop;
+        
+        return convresult(15 downto 0);
+        
+        end function;
+        
+    
 	begin
 	-- RAM component --
 	Ram_comp: ram generic map(WORDSIZE, ADDRESS_SIZE) port map(clk,we,ad,indata,outdata);
@@ -84,19 +122,42 @@ ARCHITECTURE system_arch OF system is
 
 	-- Large Pooling
 -- GEN_D_FF:
---     for ROW in 2 to 29 generate
---     begin
---         GEN_D_FF0:
---                 for COL in 2 to 29 generate
---                 begin
---         DFF_X:  
---                     D_FF 
---                     port map(
---                         D_in => WRT_DATA(COL), 
---                         CLK => CLK_vals(ROW), 
---                         Q_out => Q(ROW)(COL), 
---                         QN_out => QN(ROW)(COL)
---                     );
---             end generate;
---     end generate;
+    for ROW in 0 to 29 generate
+    begin
+        GEN_D_FF0:
+                for COL in 0 to 29 generate
+                begin
+
+                    DFF_X: conv(fil , 
+                    buff(to_integer(unsigned((ROW) * 32 + (COL))))(15 downto 0) &  
+                    buff(to_integer(unsigned((ROW) * 32 + (COL+1))))(15 downto 0) &  
+                    buff(to_integer(unsigned((ROW) * 32 + (COL+2))))(15 downto 0) &  
+                    buff(to_integer(unsigned((ROW) * 32 + (COL+3))))(15 downto 0) &  
+                    buff(to_integer(unsigned((ROW) * 32 + (COL+4))))(15 downto 0) &
+                    buff(to_integer(unsigned((ROW+1) * 32 + (COL))))(15 downto 0) &  
+                    buff(to_integer(unsigned((ROW+1) * 32 + (COL+1))))(15 downto 0) &  
+                    buff(to_integer(unsigned((ROW+1) * 32 + (COL+2))))(15 downto 0) &  
+                    buff(to_integer(unsigned((ROW+1) * 32 + (COL+3))))(15 downto 0) &  
+                    buff(to_integer(unsigned((ROW+1) * 32 + (COL+4))))(15 downto 0) &
+                    buff(to_integer(unsigned((ROW+2) * 32 + (COL))))(15 downto 0) &  
+                    buff(to_integer(unsigned((ROW+2) * 32 + (COL+1))))(15 downto 0) &  
+                    buff(to_integer(unsigned((ROW+2) * 32 + (COL+2))))(15 downto 0) &  
+                    buff(to_integer(unsigned((ROW+2) * 32 + (COL+3))))(15 downto 0) &  
+                    buff(to_integer(unsigned((ROW+2) * 32 + (COL+4))))(15 downto 0) &
+                    buff(to_integer(unsigned((ROW+3) * 32 + (COL))))(15 downto 0) &  
+                    buff(to_integer(unsigned((ROW+3) * 32 + (COL+1))))(15 downto 0) &  
+                    buff(to_integer(unsigned((ROW+3) * 32 + (COL+2))))(15 downto 0) &  
+                    buff(to_integer(unsigned((ROW+3) * 32 + (COL+3))))(15 downto 0) &  
+                    buff(to_integer(unsigned((ROW+3) * 32 + (COL+4))))(15 downto 0) &
+                    buff(to_integer(unsigned((ROW+4) * 32 + (COL))))(15 downto 0) &  
+                    buff(to_integer(unsigned((ROW+4) * 32 + (COL+1))))(15 downto 0) &  
+                    buff(to_integer(unsigned((ROW+4) * 32 + (COL+2))))(15 downto 0) &  
+                    buff(to_integer(unsigned((ROW+4) * 32 + (COL+3))))(15 downto 0) &  
+                    buff(to_integer(unsigned((ROW+4) * 32 + (COL+4))))(15 downto 0)                     
+                    );
+                    -- DFF_X: convolution generic map(5) port map(fil,img_W,convR);
+
+                  
+            end generate;
+    end generate;
 end system_arch;
