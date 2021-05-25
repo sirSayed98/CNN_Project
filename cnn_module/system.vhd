@@ -16,6 +16,7 @@ SIGNAL data_in, data_out	: std_logic_vector(15 downto 0);
 begin
 ram : ENTITY work.ram GENERIC MAP(WORDSIZE => WORDSIZE, ADDRESS_SIZE => ADDRESS_SIZE)
 PORT MAP(clk, we, address, datain, data_out);
+
 cnn_module : ENTITY work.ram GENERIC MAP(WORDSIZE => WORDSIZE, ADDRESS_SIZE => ADDRESS_SIZE)
 PORT MAP(clk, we, address, datain, data_out);
 end system_arch;
