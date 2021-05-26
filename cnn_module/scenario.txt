@@ -51,5 +51,3 @@ if layer_type[current_layer_counter] == 0;
 			enable_convolve=0 // now data in buffers
 			
 		store output at MemAddr = output_start_address + output_size*feature
-	
-	
