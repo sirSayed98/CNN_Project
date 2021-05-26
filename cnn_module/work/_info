@@ -24,9 +24,9 @@ V4k_L[8_m?:l:Q5VWVJ;c73
 !s100 >@[1j9Job5fMX[RAA2FHz2
 Z9 OL;C;10.5;63
 32
-Z10 !s110 1622033043
+Z10 !s110 1622042513
 !i10b 1
-Z11 !s108 1622033040.000000
+Z11 !s108 1622042513.000000
 Z12 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/controller.vhd|
 Z13 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/controller.vhd|
 !i113 0
@@ -54,7 +54,7 @@ R13
 R14
 R15
 Econtroller2
-Z16 w1622037386
+Z16 w1622044498
 R1
 R2
 R3
@@ -69,9 +69,9 @@ VIHgl;5V]P^R3OSO:3HRjW2
 !s100 K87Di4hommUUn?l@FJz_j1
 R9
 32
-Z19 !s110 1622037389
+Z19 !s110 1622044503
 !i10b 1
-Z20 !s108 1622037389.000000
+Z20 !s108 1622044503.000000
 Z21 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/controller2.vhd|
 Z22 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/controller2.vhd|
 !i113 0
@@ -84,10 +84,10 @@ R3
 R4
 R5
 Z23 DEx4 work 11 controller2 0 22 IHgl;5V]P^R3OSO:3HRjW2
-l80
+l84
 L35
-Z24 V3Y]MV8TfOeNdZPl56>KEG3
-Z25 !s100 TGkNO59iIm8S`gl1`MEB]0
+Z24 VIX[^U_m;Pk;h60JJ_aXVe1
+Z25 !s100 `_SYKWP:`T?IHKcPe6iln2
 R9
 32
 R19
@@ -112,11 +112,11 @@ VFBj;GTn;lNijlP_dEQ_cZ2
 !s100 E194?:``5Jj:1XO4<V[Z:0
 R9
 32
-Z29 !s110 1622033049
+R10
 !i10b 1
-Z30 !s108 1622033049.000000
-Z31 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/convolution.vhd|
-Z32 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/convolution.vhd|
+R11
+Z29 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/convolution.vhd|
+Z30 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/convolution.vhd|
 !i113 0
 R14
 R15
@@ -131,11 +131,11 @@ VFjdZOz8O^26mo5zejCXgS0
 !s100 2=7;7djzl@oLUizonFDnb1
 R9
 32
-R29
+R10
 !i10b 1
+R11
+R29
 R30
-R31
-R32
 !i113 0
 R14
 R15
@@ -145,19 +145,19 @@ R3
 R4
 R5
 R6
-Z33 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/poolFloat.vhd
-Z34 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/poolFloat.vhd
+Z31 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/poolFloat.vhd
+Z32 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/poolFloat.vhd
 l0
 L4
 V]3V`17:>]Q8b>YkAlL:U23
 !s100 M1K`=NFzmQbS_8NnSkSGG3
 R9
 32
-Z35 !s110 1622033051
+Z33 !s110 1622042514
 !i10b 1
-Z36 !s108 1622033051.000000
-Z37 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/poolFloat.vhd|
-Z38 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/poolFloat.vhd|
+Z34 !s108 1622042514.000000
+Z35 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/poolFloat.vhd|
+Z36 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/poolFloat.vhd|
 !i113 0
 R14
 R15
@@ -172,33 +172,33 @@ Vbd1BDFA8JB11P7^FfcTc[0
 !s100 ^ziHcFM4G8F@H1WaY^me33
 R9
 32
-R35
+R33
 !i10b 1
+R34
+R35
 R36
-R37
-R38
 !i113 0
 R14
 R15
 Eram
-Z39 w1621669172
+Z37 w1621669172
 R3
 R4
 R5
 R6
-Z40 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/ram.vhd
-Z41 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/ram.vhd
+Z38 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/ram.vhd
+Z39 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/ram.vhd
 l0
 L5
 V8R?mMNK<o:mZ7Yf8OOX1h0
 !s100 B?QH0EN1zA8SDY]fc8LCS2
 R9
 32
-Z42 !s110 1622033050
+Z40 !s110 1622044063
 !i10b 1
-Z43 !s108 1622033050.000000
-Z44 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/ram.vhd|
-Z45 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/ram.vhd|
+Z41 !s108 1622044063.000000
+Z42 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/ram.vhd|
+Z43 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/ram.vhd|
 !i113 0
 R14
 R15
@@ -213,33 +213,33 @@ VG_YG5FYXJ[bYhI154]`;V2
 !s100 eOV=6^Io>bA0Q7MXaN]MD0
 R9
 32
-R42
+R40
 !i10b 1
+R41
+R42
 R43
-R44
-R45
 !i113 0
 R14
 R15
 Esystem
-Z46 w1621980577
+Z44 w1621980577
 R3
 R4
 R5
 R6
-Z47 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/cnn_module.vhd
-Z48 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/cnn_module.vhd
+Z45 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/cnn_module.vhd
+Z46 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/cnn_module.vhd
 l0
 L5
 Vhn>@71<i6K>ioncC4:5S=1
 !s100 b>gMJFOOb_lbio3jWDWRA3
 R9
 32
-R42
+R33
 !i10b 1
-R43
-Z49 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/cnn_module.vhd|
-Z50 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/cnn_module.vhd|
+R11
+Z47 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/cnn_module.vhd|
+Z48 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/cnn_module.vhd|
 !i113 0
 R14
 R15
@@ -257,8 +257,8 @@ R9
 !s110 1621973650
 !i10b 1
 !s108 1621973650.000000
-R49
-R50
+R47
+R48
 !i113 0
 R14
 R15
