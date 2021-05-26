@@ -1,3 +1,4 @@
+
 library ieee;
 use ieee.STD_LOGIC_1164.ALL;
 use ieee.numeric_std.all;
@@ -36,133 +37,95 @@ ARCHITECTURE system_arch OF system is
 		);
 	end component;
 	component controller is 
-	   	GENERIC(
-			WORDSIZE : integer := 16;
+	generic(
+		ADDRESS_SIZE : integer := 16
+		);
+		port(
+		start : in std_logic;
+		clk : in std_logic;
+		we : out std_logic;
+		EWF : out std_logic;
+		EWB : out std_logic;
+		out_conv : out std_logic;
+		enable_conv : out std_logic;
+		out_pool : out std_logic;
+		reset_Accumlator : out std_logic;
+		filterAddress : out  std_logic_vector(ADDRESS_SIZE-1 downto 0);
+		BuffAddress : out  std_logic_vector(ADDRESS_SIZE-1 downto 0);
+		MemAddress : out  std_logic_vector(ADDRESS_SIZE-1 downto 0);
+		ConvAddress : out std_logic_vector(ADDRESS_SIZE-1 downto 0);
+		PoolAddress : out  std_logic_vector(ADDRESS_SIZE-1 downto 0)
+		);
+	end component;
+	component Buff is
+		generic(
+			WORD_SIZE : integer := 16;
+			WINDOW_SIZE : integer := 3;
 			ADDRESS_SIZE : integer := 16
 		);
 		port(
-			start : in std_logic;
-			clk : in std_logic;
-			datain  : in  std_logic_vector(WORDSIZE-1 downto 0);
-			convResult : in signed(WORDSIZE-1 downto 0);
-			poolResult: in signed(WORDSIZE-1 downto 0);
-			we : out std_logic;
-			address : out  std_logic_vector(ADDRESS_SIZE-1 downto 0);
-			dataout : out std_logic_vector(WORDSIZE-1 downto 0);
-			filter : out signed(WORDSIZE*5*5-1 downto 0);
-			image_window : out signed(WORDSIZE*5*5-1 downto 0)
+		buffAddress : in signed(ADDRESS_SIZE-1 downto 0);
+		datain : in signed(WORD_SIZE-1 downto 0);
+		enable : in std_logic;
+		clk : in std_logic;
+		data : out signed(WINDOW_SIZE*WINDOW_SIZE*WORD_SIZE-1 downto 0)
 		);
 	end component;
 	component convolution is
-		generic(
-			WINDOWSIZE : integer := 5
-		);
-		port(
-		filter : in signed(WINDOWSIZE*WINDOWSIZE*16-1 downto 0);
-		window : in signed(WINDOWSIZE*WINDOWSIZE*16-1 downto 0);
-		result : out signed(15 downto 0)
-		);
+	generic(
+		WINDOWSIZE : integer := 3
+	);
+	port(
+	filter : in signed(WINDOWSIZE*WINDOWSIZE*16-1 downto 0);
+	window : in signed(WINDOWSIZE*WINDOWSIZE*16-1 downto 0);
+	result : out signed(15 downto 0)
+	);
 	end component;
-	component poolingFloat is
-		generic(
-			WINDOWSIZE : integer := 5
+	component Concat is
+	generic(
+	WORD_SIZE : integer := 16
 		);
-		port(
-		window : in signed(WINDOWSIZE*WINDOWSIZE*16-1 downto 0);
-		sum : out signed(15 downto 0)
-		);
+	port(
+		arr1 : in signed(15 downto 0);
+		arr2 : in signed(15 downto 0);
+		arr3 : in signed(15 downto 0);
+		arr4 : in signed(15 downto 0);
+		arr5 : in signed(15 downto 0);
+		result : out signed(16*5-1 downto 0)
+	);
 	end component;
 	signal we :  std_logic;
-	signal ad :  std_logic_vector(ADDRESS_SIZE-1 downto 0);
+	signal EWF,EWB,out_conv,enable_conv,out_pool,reset_Accumlator :  std_logic;
 	signal indata  :   std_logic_vector(WORDSIZE-1 downto 0);
 	signal outdata  :  std_logic_vector(WORDSIZE-1 downto 0);
-	signal convR :  signed(WORDSIZE-1 downto 0);
-	signal poolR: signed(WORDSIZE-1 downto 0);
-	signal fil : signed(WORDSIZE*5*5-1 downto 0);
-	signal img_W : signed(WORDSIZE*5*5-1 downto 0);
-    
-    function conv (f : signed; w : signed)return signed is
-        variable convresult : signed(16 downto 0):= (others => '0');
-        variable tmp : signed(31 downto 0):= (others => '0');
-        begin
-            
-        for i in 0 to WINDOWSIZE*WINDOWSIZE-1 loop
-            tmp := (f((i+1)*16-1 downto i*16)) * (w((i+1)*16-1 downto i*16));
-            if(to_integer(tmp(31 downto 22)) > 15) then 
-                tmp := (others=>'1');
-                tmp(31 downto 26) := (others=>'0');
-            end if;
-            if(to_integer(tmp(31 downto 22)) < -16) then
-                tmp := (others=>'1');
-                tmp(21 downto 0) := (others=>'0');
-            end if;
-            convresult := convresult + (tmp(26)&(tmp(26 downto 11)));
-            if(to_integer(convresult(16 downto 11)) > 15) then 
-                convresult := (others=>'1');
-                convresult(16 downto 15) := "00";
-            end if;
-            if(to_integer(convresult(16 downto 11)) < -16) then
-                convresult := (others=>'1');
-                convresult(10 downto 0) := (others=>'0');
-            end if;
-        end loop;
-        
-        return convresult(15 downto 0);
-        
-        end function;
-        
-    
+	signal imgdata : signed(32*32*WORDSIZE-1 downto 0) := (others => '0');
+	signal filter_data : signed(5*5*WORDSIZE-1 downto 0) := (others => '0');
+	signal convResult : signed(28*28*WORDSIZE-1 downto 0) := (others => '0');
+	signal help : signed(28*28*5*5*WORDSIZE-1 downto 0) := (others => 'U');
+	signal filterAddress,BuffAddress,MemAddress,ConvAddress,PoolAddress : std_logic_vector(ADDRESS_SIZE-1 downto 0);	
 	begin
-	-- RAM component --
-	Ram_comp: ram generic map(WORDSIZE, ADDRESS_SIZE) port map(clk,we,ad,indata,outdata);
-	-- controller --
-	Control: controller generic map(WORDSIZE , ADDRESS_SIZE) port map(start,clk,indata,convR,poolR,we,ad,outdata,fil,img_W);		
-	-- convolution --
-	Convolute: convolution generic map(5) port map(fil,img_W,convR);
-	-- pooling --
-	Pooling: poolingFloat generic map(5) port map(img_W,poolR);
-
-
-	-- Large Pooling
-GEN_D_FF:
-    for ROW in 0 to 27 generate
-    begin
-        GEN_D_FF0:
-                for COL in 0 to 27 generate
-                begin
-
-                    conv_result(ROW * 28 + COL) <= conv(signed(fil) , signed(
-                        buff(to_integer(unsigned((ROW) * 32 + (COL))))(15 downto 0) &  
-                        buff(to_integer(unsigned((ROW) * 32 + (COL+1))))(15 downto 0) &  
-                        buff(to_integer(unsigned((ROW) * 32 + (COL+2))))(15 downto 0) &  
-                        buff(to_integer(unsigned((ROW) * 32 + (COL+3))))(15 downto 0) &  
-                        buff(to_integer(unsigned((ROW) * 32 + (COL+4))))(15 downto 0) &
-                        buff(to_integer(unsigned((ROW+1) * 32 + (COL))))(15 downto 0) &  
-                        buff(to_integer(unsigned((ROW+1) * 32 + (COL+1))))(15 downto 0) &  
-                        buff(to_integer(unsigned((ROW+1) * 32 + (COL+2))))(15 downto 0) &  
-                        buff(to_integer(unsigned((ROW+1) * 32 + (COL+3))))(15 downto 0) &  
-                        buff(to_integer(unsigned((ROW+1) * 32 + (COL+4))))(15 downto 0) &
-                        buff(to_integer(unsigned((ROW+2) * 32 + (COL))))(15 downto 0) &  
-                        buff(to_integer(unsigned((ROW+2) * 32 + (COL+1))))(15 downto 0) &  
-                        buff(to_integer(unsigned((ROW+2) * 32 + (COL+2))))(15 downto 0) &  
-                        buff(to_integer(unsigned((ROW+2) * 32 + (COL+3))))(15 downto 0) &  
-                        buff(to_integer(unsigned((ROW+2) * 32 + (COL+4))))(15 downto 0) &
-                        buff(to_integer(unsigned((ROW+3) * 32 + (COL))))(15 downto 0) &  
-                        buff(to_integer(unsigned((ROW+3) * 32 + (COL+1))))(15 downto 0) &  
-                        buff(to_integer(unsigned((ROW+3) * 32 + (COL+2))))(15 downto 0) &  
-                        buff(to_integer(unsigned((ROW+3) * 32 + (COL+3))))(15 downto 0) &  
-                        buff(to_integer(unsigned((ROW+3) * 32 + (COL+4))))(15 downto 0) &
-                        buff(to_integer(unsigned((ROW+4) * 32 + (COL))))(15 downto 0) &  
-                        buff(to_integer(unsigned((ROW+4) * 32 + (COL+1))))(15 downto 0) &  
-                        buff(to_integer(unsigned((ROW+4) * 32 + (COL+2))))(15 downto 0) &  
-                        buff(to_integer(unsigned((ROW+4) * 32 + (COL+3))))(15 downto 0) &  
-                        buff(to_integer(unsigned((ROW+4) * 32 + (COL+4))))(15 downto 0)     
-                    ) 
-                                    
-                    );
-                    -- DFF_X: convolution generic map(5) port map(fil,img_W,convR);
-
-                  
-            end generate;
-    end generate;
+		-- RAM component --
+		Ram_comp: ram generic map(WORDSIZE, ADDRESS_SIZE) port map(clk,we,(MemAddress),outdata,indata);
+		-- controller component--
+		Control: controller generic map(ADDRESS_SIZE) port map(start,clk,we,EWF,EWB,out_conv,enable_conv,out_pool,reset_Accumlator,filterAddress,BuffAddress,MemAddress,ConvAddress,PoolAddress);		
+		-- Image Buffer component--
+		Img_Buffer: Buff generic map(WORDSIZE, 32 , ADDRESS_SIZE) port map(signed(BuffAddress),signed(indata),EWB,clk,(imgdata));
+		-- Filter Buffer component--
+		Filter_Buffer: Buff generic map(WORDSIZE, 5 , ADDRESS_SIZE) port map(signed(filterAddress),signed(indata),EWF,clk,(filter_data));
+		 Conv_REG: 
+  			 for i in 0 to 7 generate
+				A:
+				for j in 0 to 7 generate
+					concat1: Concat port map(
+						imgdata(((i*32+j+5)*16)-1 downto (i*32+j)*16),
+						imgdata((((i+1)*32+j+5)*16)-1 downto ((i+1)*32+j)*16),
+						imgdata((((i+2)*32+j+5)*16)-1 downto ((i+2)*32+j)*16),
+						imgdata((((i+3)*32+j+5)*16)-1 downto ((i+3)*32+j)*16),
+						imgdata((((i+4)*32+j+5)*16)-1 downto ((i+4)*32+j)*16),
+						help((i*28+j+25)*16-1 downto (i*28+j)* 16));
+      				conv : convolution generic map(5) port map(filter_data,
+					   help((i*28+j+25)*16-1 downto (i*28+j)* 16),
+					   convResult((i*28+j+1)*16-1 downto (i*28+j)* 16));--index of convResult
+				end generate A;
+			 end generate Conv_REG;
 end system_arch;
