@@ -20,17 +20,6 @@ Model Technology ModelSim SE-64 vcom 10.5 Compiler 2016.02 Feb 13 2016
 -- Compiling entity poolingFloat
 -- Compiling architecture Pool_arc of poolingFloat
 
-} {} {}} {D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/controller.vhd} {1 {vcom -work work -2002 -explicit -vopt -stats=none {D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/controller.vhd}
-Model Technology ModelSim SE-64 vcom 10.5 Compiler 2016.02 Feb 13 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Loading package std_logic_arith
--- Loading package STD_LOGIC_UNSIGNED
--- Compiling entity controller
--- Compiling architecture controllerArc of controller
-
 } {} {}} {D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/ram.vhd} {1 {vcom -work work -2002 -explicit -vopt -stats=none {D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/ram.vhd}
 Model Technology ModelSim SE-64 vcom 10.5 Compiler 2016.02 Feb 13 2016
 -- Loading package STANDARD

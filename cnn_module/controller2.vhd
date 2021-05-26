@@ -154,29 +154,43 @@ ARCHITECTURE controller2Arc OF controller2 is
 							we <= '0';
 							-- Load Input from MemAddr = input_start_address + input_size * feature 
 							EWB <= '1';
-							MemAddr <= input_start_address  ;
-							-- wordCount ++
-							-- if wordCount = input size EWB  = 0 image_Loaded = 1
+							MemAddr <= input_start_address + wordCount ;
+							wordCount := wordCount + 1;  
+							if wordCountordCount = input_size then 
+								EWB <= 0 ;
+								image_Loaded = 1;
+								EWF <= '1';
+								wordCount := 0;
+							end if;
 						elsif filter_loaded = 0 then
 							EWF <= '1';
-							MemAddr <= filter_start_address ;
-							-- MemAddr ++
-							-- if MemAddr = filter size EWF  = 0 image_Loaded = 1
-						elsif feature < max_feature_maps then
+							MemAddr <= filter_start_address + wordCount ;
+							wordCount := wordCount + 1;
+							if wordCountordCount = 25*25 then 
+								EWF <= 0 ;
+								filter_loaded = 1;
+								wordCount := 0;
+							end if;
+						end if; 
+						if feature < max_feature_maps and image_loaded = 1 and filter_loaded = 1 then
+							--reset_accumulator = 1
 							if depth < max_depth then					
-								
+							--image_loaded = 0;  filter_loaded = 0;
 								-- reset_acummulator=0	// has no effect when accumulating
 								reset_Accumlator = '0';
 								
 								-- enable_convolve=0
-								
+								enable_conv = '0'
 								
 								-- enalble_convolve = 1
+								enable_conv = '1'
 								
-								
-								
+								depth = depth + 1
+							elsif 
 								-- enable_convolve=0 // now data in buffers
 							end if;
+							
+
 							--store output at MemAddr = output_start_address + output_size*feature
 						else
 							 --current_layer_counter+=1
@@ -190,7 +204,20 @@ ARCHITECTURE controller2Arc OF controller2 is
 							filter_start_address <= filter_start_address_rom(current_layer_sig);
 							max_feature_maps <= max_feature_maps_rom(current_layer_sig);
 							max_depth <= max_depth_rom(current_layer_sig);
-							if feature < max_feature_maps then
+							if image_loaded = 0 then
+								-- read from memory --
+								we <= '0';
+								-- Load Input from MemAddr = input_start_address + input_size * feature 
+								EWB <= '1';
+								MemAddr <= input_start_address + wordCount ;
+								wordCount := wordCount + 1;  
+								if wordCountordCount = input_size then 
+									EWB <= 0 ;
+									image_Loaded = 1;
+									wordCount := 0;
+								end if;
+							if feature < max_feature_maps and image_loaded = 1 then
+								-- if need ti 
 								-- Load Input from MemAddr = input_start_address + input_size * feature 
 								-- OUT_POOL=1
 								-- store output at MemAddr = output_start_address + output_size*feature
