@@ -10,7 +10,7 @@ Entity Buff is
 		ADDRESS_SIZE : integer := 16
 	);
 	port(
-	buffAddress : in std_logic_vector(ADDRESS_SIZE-1 downto 0);
+	buffAddress : in signed(ADDRESS_SIZE-1 downto 0);
 	datain : in signed(WORD_SIZE-1 downto 0);
 	enable : in std_logic;
 	clk : in std_logic;
@@ -27,7 +27,7 @@ process(clk) is
 	begin
 		if rising_edge(clk) then
 			if enable = '1' then
-				buffSig(WORD_SIZE * (to_integer(buffAddress)+1)-1 downto WORD_SIZE * to_integer(buffAddress)) <= datain;
+				buffSig((WORD_SIZE * (to_integer(buffAddress)+1))-1 downto WORD_SIZE * to_integer(buffAddress)) <= datain;
 			end if;
 		end if;
 	end process;
