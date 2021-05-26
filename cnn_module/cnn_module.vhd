@@ -17,12 +17,6 @@ end entity system;
 
 ARCHITECTURE system_arch OF system is
     
-	type buffer_type is array(0 TO 2**10-1) OF std_logic_vector(WORDSIZE-1 downto 0);
-	signal buff : buffer_type;
-
-	type ConvResult is array(0 TO 783) OF std_logic_vector(WORDSIZE-1 downto 0);
-	signal conv_result : ConvResult;
-
 
 	component ram is
 		GENERIC (WORDSIZE : integer := 16;
