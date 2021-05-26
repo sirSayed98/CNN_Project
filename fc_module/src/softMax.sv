@@ -4,20 +4,20 @@ module softMax#(
     )
     (
     output [$clog2(LAYER_SIZE)-1 : 0] Z,
-	input  [WORD_SIZE-1 : 0] X [LAYER_SIZE-1 : 0]
+	input  signed [WORD_SIZE-1 : 0] X [LAYER_SIZE-1 : 0]
     );
 
     parameter N = $clog2(LAYER_SIZE);
     reg [N-1 : 0] Idx [LAYER_SIZE-1 : 0];
-    reg [WORD_SIZE-1 : 0] resVal [LAYER_SIZE-1 : 0];
+    reg signed [WORD_SIZE-1 : 0] resVal [LAYER_SIZE-1 : 0];
     reg [N-1 : 0] resIdx [LAYER_SIZE-1 : 0];
 
     genvar i;
     integer k;
 
-    always begin
-        Idx[k] = 4'd0;
-        for(k = 0; k < LAYER_SIZE; k = k + 1) begin
+    always @* begin
+        Idx[0] = 4'd0;
+        for(k = 1; k < LAYER_SIZE; k = k + 1) begin
             Idx[k] = Idx[k-1] + 1;
         end
         resVal[0] = X[0];

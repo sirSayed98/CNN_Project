@@ -18,13 +18,18 @@ module fullyConnected#(
     reg [WORD_SIZE-1 : 0] prod [OP_LAYER_SIZE-1 : 0][IP_LAYER_SIZE-1 : 0];
     reg [WORD_SIZE-1 : 0] prodinv [IP_LAYER_SIZE-1 : 0][IP_LAYER_SIZE-1 : 0];
     
+
+//C:/Users/Yamani/anaconda3/python.exe c:/Users/Yamani/Desktop/College/VLSI/CNN_Project/fc_module/src/fullyConnected_tb.py
+//always @(extended_value, extend_using_this_bit_mask, dwidth_scaled_pre_extend_array)
+//always @(extended_value, extend_using_this_bit_mask, dwidth_scaled_pre_extend_array[k])
+
     integer i,j;
-	always begin
+	always @* begin
         for(i = 0 ; i < OP_LAYER_SIZE ; i = i + 1) begin
             res[i] = 0;
             for(j = 0 ; j < IP_LAYER_SIZE ; j = j + 1) begin
                 intrmd[i][j] = X[j] * W[i][j];
-                if(intrmd[i][j][WORD_SIZE-1]) begin
+                if(intrmd[i][j][WORD_SIZE*2-1]) begin
                     intrmdinv[i][j] = ~intrmd[i][j] + 1; // 2's compliment
                     prodinv[i][j] = intrmdinv[i][j][WORD_SIZE+INT_SLICE-1 : WORD_SIZE-DEC_SLICE];
                     prod[i][j] = ~prodinv[i][j] + 1; // 2's compliment
@@ -39,3 +44,5 @@ module fullyConnected#(
     end
     assign Z = res;
 endmodule
+
+

@@ -6,7 +6,6 @@ add wave -position end  sim:/softmax_tb/TEST_CASES_NUM
 add wave -position end  sim:/softmax_tb/clk
 add wave -position end  sim:/softmax_tb/reset
 add wave -position end  sim:/softmax_tb/input_layer
-add wave -position end  sim:/softmax_tb/input_layer_wire
 add wave -position end  sim:/softmax_tb/resultExpected
 add wave -position end  sim:/softmax_tb/circuit_output
 add wave -position end  sim:/softmax_tb/vectornum
