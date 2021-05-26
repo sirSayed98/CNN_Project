@@ -6,7 +6,7 @@ layers = [0,1,2,3,4]
 * output_start_address_rom = [IMMEDIATE_START_ADDRESS,IMMEDIATE_START_ADDRESS+784*1,IMMEDIATE_START_ADDRESS+784+196*6,IMMEDIATE_START_ADDRESS+1960+16*100,IMMEDIATE_START_ADDRESS+3560+25 ] 
 * output_size_rom = [784,14*14=196,100,5*5,1] 
 * filter_start_address_rom = [1024,*,1174,*,3575] 
-* max_feature_maps_rom = [6,*,16,*,120] eg. 16 
+* max_feature_maps_rom = [6,6,16,16,120] eg. 16 
 * max_depth_rom = [1,*,6,*,16] 	eg. 6
 
 intialize {
