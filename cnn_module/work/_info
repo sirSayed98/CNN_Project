@@ -54,7 +54,7 @@ R13
 R14
 R15
 Econtroller2
-Z16 w1622044498
+Z16 w1622044988
 R1
 R2
 R3
@@ -69,9 +69,9 @@ VIHgl;5V]P^R3OSO:3HRjW2
 !s100 K87Di4hommUUn?l@FJz_j1
 R9
 32
-Z19 !s110 1622044503
+Z19 !s110 1622045366
 !i10b 1
-Z20 !s108 1622044503.000000
+Z20 !s108 1622045366.000000
 Z21 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/controller2.vhd|
 Z22 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module/controller2.vhd|
 !i113 0
@@ -86,8 +86,8 @@ R5
 Z23 DEx4 work 11 controller2 0 22 IHgl;5V]P^R3OSO:3HRjW2
 l84
 L35
-Z24 VIX[^U_m;Pk;h60JJ_aXVe1
-Z25 !s100 `_SYKWP:`T?IHKcPe6iln2
+Z24 VFznhhOkYFg7CQKfXT^I>_1
+Z25 !s100 fn0QlWoi4hDB5WFnbAPd<1
 R9
 32
 R19

@@ -26,7 +26,7 @@ use IEEE.std_logic_unsigned.all;
 		reset_Accumlator : out std_logic;
 		filterAddress : out  std_logic_vector(ADDRESS_SIZE-1 downto 0);
 		BuffAddress : out  std_logic_vector(ADDRESS_SIZE-1 downto 0);
-		MemAddress : out  std_logic_vector(ADDRESS_SIZE-1 downto 0);
+		MemAddr : out  std_logic_vector(ADDRESS_SIZE-1 downto 0);
 		ConvAddress : out std_logic_vector(ADDRESS_SIZE-1 downto 0);
 		PoolAddress : out  std_logic_vector(ADDRESS_SIZE-1 downto 0)
 		);
@@ -71,6 +71,7 @@ ARCHITECTURE controller2Arc OF controller2 is
 	
 
 	-- these are the input to convolution and to pooling
+	
 	signal input_start_address : integer range 0 to 2**WORDSIZE - 1 := 0; 
 	signal input_size : integer range 0 to 2**WORDSIZE - 1 := 0; -- this is the input of 2D Image or matrix
 	signal output_start_address : integer range 0 to 2**WORDSIZE - 1 := 0; -- this the first place to write to the output
@@ -83,32 +84,32 @@ ARCHITECTURE controller2Arc OF controller2 is
 
 	begin 		
 
-		process (current_layer_sig) is
-		begin
-			-- feature := 0;
+		-- process (current_layer_sig) is
+		-- begin
+		-- 	feature := 0;
 
-			-- if layer_type_rom(current_layer_sig) = 0 then 
-			-- 		--intialization convolution
-			-- 		input_start_address <= input_start_address_rom(current_layer_sig);
-			-- 		input_size <= input_size_rom(current_layer_sig);
-			-- 		output_start_address <= output_start_address_rom(current_layer_sig);
-			-- 		output_size <= output_size_rom(current_layer_sig);
-			-- 		filter_start_address <= filter_start_address_rom(current_layer_sig);
-			-- 		max_feature_maps <= max_feature_maps_rom(current_layer_sig);
-			-- 		max_depth <= max_depth_rom(current_layer_sig);
+		-- 	if layer_type_rom(current_layer_sig) = 0 then 
+		-- 			--intialization convolution
+		-- 			input_start_address <= input_start_address_rom(current_layer_sig);
+		-- 			input_size <= input_size_rom(current_layer_sig);
+		-- 			output_start_address <= output_start_address_rom(current_layer_sig);
+		-- 			output_size <= output_size_rom(current_layer_sig);
+		-- 			filter_start_address <= filter_start_address_rom(current_layer_sig);
+		-- 			max_feature_maps <= max_feature_maps_rom(current_layer_sig);
+		-- 			max_depth <= max_depth_rom(current_layer_sig);
 					
-			-- elsif layer_type_rom(current_layer_sig) = 1 then
-			-- 		-- intialize pooling
-			-- 		input_start_address <= input_start_address_rom(current_layer_sig);
-			-- 		input_size <= input_size_rom(current_layer_sig);
-			-- 		output_start_address <= output_start_address_rom(current_layer_sig);
-			-- 		output_size <= output_size_rom(current_layer_sig);
-			-- 		filter_start_address <= filter_start_address_rom(current_layer_sig);
-			-- 		max_feature_maps <= max_feature_maps_rom(current_layer_sig);
-			-- 		max_depth <= max_depth_rom(current_layer_sig);					
-			-- end if;
+		-- 	elsif layer_type_rom(current_layer_sig) = 1 then
+		-- 			-- intialize pooling
+		-- 			input_start_address <= input_start_address_rom(current_layer_sig);
+		-- 			input_size <= input_size_rom(current_layer_sig);
+		-- 			output_start_address <= output_start_address_rom(current_layer_sig);
+		-- 			output_size <= output_size_rom(current_layer_sig);
+		-- 			filter_start_address <= filter_start_address_rom(current_layer_sig);
+		-- 			max_feature_maps <= max_feature_maps_rom(current_layer_sig);
+		-- 			max_depth <= max_depth_rom(current_layer_sig);					
+		-- 	end if;
 			
-		end process;
+		-- end process;
 
 		process (start, clk, current_layer_sig) is
 			variable MemAddr : std_logic_vector(ADDRESS_SIZE-1 downto 0);
@@ -122,39 +123,66 @@ ARCHITECTURE controller2Arc OF controller2 is
 			variable filter_loaded : Integer;
 			variable feature : Integer;
 			variable depth : Integer;
-
+			variable image_loaded : Integer;
+			variable filter_loaded : Integer;
 			begin 
 				if rising_edge(start) then 
 					--intialization
 						current_layer_sig <= 0;
-						-- feature := X"0001";
-						if layer_type_rom(0) = 0 then 
-						--intialization convolution
-							input_start_address <= input_start_address_rom(current_layer_sig);
-							input_size <= input_size_rom(current_layer_sig);
-							output_start_address <= output_start_address_rom(current_layer_sig);
-							output_size <= output_size_rom(current_layer_sig);
-							filter_start_address <= filter_start_address_rom(current_layer_sig);
-							max_feature_maps <= max_feature_maps_rom(current_layer_sig);
-							max_depth <= max_depth_rom(current_layer_sig);
-					
-						elsif layer_type_rom(0) = 1 then
-								-- intialize pooling
-								input_start_address <= input_start_address_rom(current_layer_sig);
-								input_size <= input_size_rom(current_layer_sig);
-								output_start_address <= output_start_address_rom(current_layer_sig);
-								output_size <= output_size_rom(current_layer_sig);
-								filter_start_address <= filter_start_address_rom(current_layer_sig);
-								max_feature_maps <= max_feature_maps_rom(current_layer_sig);
-								max_depth <= max_depth_rom(current_layer_sig);					
-						end if;
-					
+						feature := 0;
+						depth := 0;	
+						image_loaded := 0;
+						filter_loaded := 0;	
+						EWB <= '0';
+						EWF	<= '0';
+						wordsCount := 0;		
 				end if;
 				if rising_edge(clk) then 
 
 
 					if layer_type_rom(current_layer_sig) = 0 then 
 					--intialization convolution
+						input_start_address <= input_start_address_rom(current_layer_sig);
+						input_size <= input_size_rom(current_layer_sig);
+						output_start_address <= output_start_address_rom(current_layer_sig);
+						output_size <= output_size_rom(current_layer_sig);
+						filter_start_address <= filter_start_address_rom(current_layer_sig);
+						max_feature_maps <= max_feature_maps_rom(current_layer_sig);
+						max_depth <= max_depth_rom(current_layer_sig);
+						if image_loaded = 0 then
+							-- read from memory --
+							we <= '0';
+							-- Load Input from MemAddr = input_start_address + input_size * feature 
+							EWB <= '1';
+							MemAddr <= input_start_address  ;
+							-- wordCount ++
+							-- if wordCount = input size EWB  = 0 image_Loaded = 1
+						elsif filter_loaded = 0 then
+							EWF <= '1';
+							MemAddr <= filter_start_address ;
+							-- MemAddr ++
+							-- if MemAddr = filter size EWF  = 0 image_Loaded = 1
+						elsif feature < max_feature_maps then
+							if depth < max_depth then					
+								
+								-- reset_acummulator=0	// has no effect when accumulating
+								reset_Accumlator = '0';
+								
+								-- enable_convolve=0
+								
+								
+								-- enalble_convolve = 1
+								
+								
+								
+								-- enable_convolve=0 // now data in buffers
+							end if;
+							--store output at MemAddr = output_start_address + output_size*feature
+						else
+							 --current_layer_counter+=1
+						end if;
+					elsif layer_type_rom(current_layer_sig) = 1 then
+							--intialize pooling
 							input_start_address <= input_start_address_rom(current_layer_sig);
 							input_size <= input_size_rom(current_layer_sig);
 							output_start_address <= output_start_address_rom(current_layer_sig);
@@ -162,16 +190,14 @@ ARCHITECTURE controller2Arc OF controller2 is
 							filter_start_address <= filter_start_address_rom(current_layer_sig);
 							max_feature_maps <= max_feature_maps_rom(current_layer_sig);
 							max_depth <= max_depth_rom(current_layer_sig);
-							
-					elsif layer_type_rom(current_layer_sig) = 1 then
-							-- intialize pooling
-							input_start_address <= input_start_address_rom(current_layer_sig);
-							input_size <= input_size_rom(current_layer_sig);
-							output_start_address <= output_start_address_rom(current_layer_sig);
-							output_size <= output_size_rom(current_layer_sig);
-							filter_start_address <= filter_start_address_rom(current_layer_sig);
-							max_feature_maps <= max_feature_maps_rom(current_layer_sig);
-							max_depth <= max_depth_rom(current_layer_sig);					
+							if feature < max_feature_maps then
+								-- Load Input from MemAddr = input_start_address + input_size * feature 
+								-- OUT_POOL=1
+								-- store output at MemAddr = output_start_address + output_size*feature
+								-- OUT_POOL = 0
+							else
+								-- current_layer_counter+=1
+							end if;
 					end if;
 				end if;
 				-- if start = 1 and rising_edge(clk) then
@@ -186,14 +212,13 @@ ARCHITECTURE controller2Arc OF controller2 is
 				-- 	end if;
 					
 				-- end if;
-
 					-- wordsCount := 0;
 					-- MemAddr := (others=>'0');
 					-- BuffAddr := (others=>'0');
 					-- filterAddr := (others=>'0');
 					-- ConvAddr := (others=>'0');
 					-- PoolAddr := (others=>'0');
-					-- MemAddress <= MemAddr;
+					-- MemAddr <= MemAddr;
 					-- BuffAddress <= BuffAddr;
 					-- filterAddress <= filterAddr;
 					-- ConvAddress  <= ConvAddr;
@@ -214,7 +239,7 @@ ARCHITECTURE controller2Arc OF controller2 is
 					-- 	-- load image --
 					-- 	MemAddr := MemAddr + X"0001";
 					-- 	BuffAddr := BuffAddr + X"0001";
-					-- 	MemAddress <= MemAddr;
+					-- 	MemAddr <= MemAddr;
 					-- 	BuffAddress <= BuffAddr;
 					-- 	wordsCount := wordsCount + 1;
 					-- 	if 	wordsCount = 1024 then
@@ -226,7 +251,7 @@ ARCHITECTURE controller2Arc OF controller2 is
 					-- elsif img_loaded = 1 and filter_loaded = 0 then
 					-- 	MemAddr := MemAddr + X"0001";
 					-- 	filterAddr := filterAddr + X"0001";
-					-- 	MemAddress <= MemAddr;
+					-- 	MemAddr <= MemAddr;
 					-- 	filterAddress <= filterAddr;
 					-- 	wordsCount := wordsCount + 1;
 					-- 	if wordsCount = 25 then
