@@ -1,6 +1,6 @@
 module softmax_tb # ( parameter WORD_SIZE = 16, LAYER_SIZE = 10, TEST_CASES_NUM = 10)();
     reg clk, reset; // clock and reset are internal
-    reg  [WORD_SIZE-1:0] input_layer [LAYER_SIZE-1:0]; 
+    reg signed [WORD_SIZE-1:0] input_layer [LAYER_SIZE-1:0]; 
     reg [$clog2(LAYER_SIZE)-1:0] resultExpected; // values from testvectors
     wire [$clog2(LAYER_SIZE)-1:0] circuit_output; // output of circuit
     reg [LAYER_SIZE-1:0] vectornum, errors; // bookkeeping variables
@@ -14,15 +14,18 @@ module softmax_tb # ( parameter WORD_SIZE = 16, LAYER_SIZE = 10, TEST_CASES_NUM 
     // instantiate device under test
 
 
-    wire  [WORD_SIZE-1:0] input_layer_wire [LAYER_SIZE-1:0]; 
+    //wire signed [WORD_SIZE-1:0] input_layer_wire [LAYER_SIZE-1:0]; 
 
 //
-    assign input_layer_wire = input_layer;
+    //assign input_layer_wire = input_layer;
 // remove
 
     
     //resultBuffer = {(N*2){1'b0}};
     softMax #(WORD_SIZE, LAYER_SIZE) mySoftmax(.Z(circuit_output), .X(input_layer));
+
+    //# ** Error: (vsim-3906) Connection type 'reg[15:0]$[9:0]' is incompatible with 'wire signed[15:0]$[9:0]' for  port (X):  Array elems. must both be signed or unsigned.
+
     /*softMax #(WORD_SIZE, LAYER_SIZE) mySoftmax(.Z(circuit_output),.X({
         {16'b1010101010111111},
         {16'b1010101010110111},
