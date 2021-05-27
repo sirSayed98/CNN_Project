@@ -1,9 +1,20 @@
-
 quit -sim
 # End time: 23:42:00 on May 26,2021, Elapsed time: 0:00:50
 # Errors: 0, Warnings: 0
 # Compile of controller2.vhd was successful.
 vsim work.controller2
+# End time: 00:13:00 on May 27,2021, Elapsed time: 0:04:11
+# Errors: 0, Warnings: 0
+# vsim work.controller2 
+# Start time: 00:13:00 on May 27,2021
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.std_logic_arith(body)
+# Loading ieee.std_logic_unsigned(body)
+# Loading work.controller2(controller2arc)#1
 # vsim work.controller2 
 # Start time: 23:43:51 on May 26,2021
 # ** Note: (vsim-3813) Design is being optimized due to module recompilation...
@@ -51,9 +62,77 @@ add wave -position end  sim:/controller2/ConvAddress
 add wave -position end  sim:/controller2/BuffAddress
 add wave -position end  sim:/controller2/ADDRESS_SIZE
 force -freeze sim:/controller2/clk 1 0, 0 {50 ns} -r 100
-run
-force -freeze sim:/controller2/reset 0 0
 force -freeze sim:/controller2/start 0 0
-force -freeze sim:/controller2/start 1 0
-run
+force -freeze sim:/controller2/reset 0 0
 step -over
+run -continue
+step -over
+step
+step
+step
+# Next activity is in 50 ns.
+step
+step
+step
+step
+step
+# Next activity is in 50 ns.
+step
+step
+step
+step
+step
+# Next activity is in 50 ns.
+step
+step
+step
+step
+step
+# Next activity is in 50 ns.
+step
+step
+step
+step
+step
+# Next activity is in 50 ns.
+step
+step
+step
+step
+step
+# Next activity is in 50 ns.
+step
+step
+step
+step
+step
+# Next activity is in 50 ns.
+step
+step
+step
+step
+step
+# Next activity is in 50 ns.
+step
+step
+step
+step
+step
+# Next activity is in 50 ns.
+step
+step
+step
+step
+step
+# Next activity is in 50 ns.
+step
+step
+step
+step
+step
+# Next activity is in 50 ns.
+step
+# Causality operation skipped due to absence of debug database file
+force -freeze sim:/controller2/start 1 0
+
+
