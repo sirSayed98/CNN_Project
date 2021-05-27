@@ -15,4 +15,4 @@ run 10 ps
 
 force -freeze sim:/system/start 1 0
 
-run 100 ns
+run 14 ms

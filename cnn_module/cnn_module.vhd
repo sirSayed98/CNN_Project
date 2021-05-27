@@ -54,7 +54,7 @@ architecture system_arch of system is
     );
   end component;
 
-  component controller2 is
+  component controller is
     generic (
       ADDRESS_SIZE : integer := 16
     );
@@ -167,7 +167,7 @@ begin
   -- RAM component --
   Ram_comp_lbl : ram generic map(WORDSIZE, ADDRESS_SIZE) port map(clk, we, MemAddress, outdata, indata);
   -- controller component--
-  Control_lbl : controller2 generic map(ADDRESS_SIZE) port map(start, clk, reset, we, EWF, EWB, out_conv, enable_conv, out_pool, done, reset_Accumulator, filterAddress, BuffAddress, MemAddress, ConvAddress, PoolAddress);
+  Control_lbl : controller generic map(ADDRESS_SIZE) port map(start, clk, reset, we, EWF, EWB, out_conv, enable_conv, out_pool, done, reset_Accumulator, filterAddress, BuffAddress, MemAddress, ConvAddress, PoolAddress);
   -- Image Buffer component--
   Img_Buffer_lbl : Buff generic map(WORDSIZE, 32, ADDRESS_SIZE) port map(signed(BuffAddress), signed(indata), EWB, clk, imgdata);
   -- Filter Buffer component--
