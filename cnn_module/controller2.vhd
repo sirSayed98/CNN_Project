@@ -81,6 +81,7 @@ ARCHITECTURE controller2Arc OF controller2 is
 	begin 		
 		process (start, clk) is
 			variable MemAddr : std_logic_vector(ADDRESS_SIZE-1 downto 0);
+			variable BuffTempAddr : std_logic_vector(ADDRESS_SIZE-1 downto 0);
 			variable layerCounter : Integer;
 			variable wordsCount : Integer;
 			variable feature : Integer;
@@ -104,6 +105,7 @@ ARCHITECTURE controller2Arc OF controller2 is
 			variable row  : integer range 0 to 2**WORDSIZE - 1 := 0;
 			variable col  : integer range 0 to 2**WORDSIZE - 1 := 0;
 			variable window_input_size : integer range 0 to 2**WORDSIZE - 1 := 0;
+			variable window_output_size : integer range 0 to 2**WORDSIZE - 1 := 0;
 			
 			begin 
 
@@ -119,6 +121,7 @@ ARCHITECTURE controller2Arc OF controller2 is
 						EWF	<= '0';
 						wordsCount := 0;
 						MemAddr := X"0000";
+						BuffTempAddr := X"0000";
 						row := 0;
 						col := 0;
 						done <= '0';
@@ -144,6 +147,9 @@ ARCHITECTURE controller2Arc OF controller2 is
 							max_depth := max_depth_rom(current_layer_sig);
 							output_saved := 1;
 							window_input_size := window_input_size_rom(current_layer_sig);
+							window_output_size := window_output_size_rom(current_layer_sig);
+							row := 0;
+							col := 0;
 
 						elsif image_loaded = 0 then
 							-- read from memory --
@@ -151,30 +157,33 @@ ARCHITECTURE controller2Arc OF controller2 is
 							-- Load Input from MemAddr = input_start_address + input_size * feature 
 							EWB <= '1';
 							MemAddress <= temp_input_start_address + MemAddr;
-							BuffAddress <= MemAddr;
+							BuffAddress <= BuffTempAddr;
 
-
+							-- buffer address 
 							if col = window_input_size - 1 then
 								col := 0;
 								row := row + 1;
-								MemAddr := std_logic_vector(to_unsigned((row * 32), ADDRESS_SIZE));
+								BuffTempAddr := std_logic_vector(to_unsigned((row * 32), ADDRESS_SIZE));
 							else
 								col  := col+ 1;
-								MemAddr := MemAddr + X"0001";
-							end if;
-							
+								BuffTempAddr := BuffTempAddr + X"0001";
+								end if;
+								
+							-- memory location address	
+							MemAddr := MemAddr + X"0001";
 							wordsCount := wordsCount + 1;
 
 							-- BuffAddr <= wordsCount  -- DONE:
 							if wordsCount = input_size + 1 then 
 								EWB <= '0' ;
 								image_Loaded := 1;
-								EWF <= '1';
+								-- EWF <= '1';
 								wordsCount := 0;
 								MemAddr := X"0000";
+								BuffTempAddr := X"0000";
 							end if;
 						elsif filter_loaded = 0 then
-							EWF <= '1';
+							EWF <= '1'; 
 							MemAddress <= temp_filter_start_address + MemAddr ;
 							filterAddress <= MemAddr;
 
@@ -186,6 +195,9 @@ ARCHITECTURE controller2Arc OF controller2 is
 								EWF <= '0' ;
 								filter_loaded := 1;
 						 		wordsCount := 0;
+								row := 0;
+								col := 0;
+								BuffTempAddr := X"0000";
 								MemAddr := X"0000";
 								enable_conv <= '1';
 							end if;
@@ -194,25 +206,30 @@ ARCHITECTURE controller2Arc OF controller2 is
 							out_conv <= '1';
 							-- Load Input from MemAddr = input_start_address + input_size * feature 
 							MemAddress <= temp_output_start_address + MemAddr;
-							ConvAddress <=  MemAddr;
+							ConvAddress <=  BuffTempAddr;
 
-							if col = window_input_size - 1 then
+							-- convolution buffer address 
+							if col = window_output_size - 1 then
 								col := 0;
 								row := row + 1;
-								MemAddr := std_logic_vector(to_unsigned((row * 32), ADDRESS_SIZE));
+								BuffTempAddr := std_logic_vector(to_unsigned((row * 28), ADDRESS_SIZE));
 							else
 								col  := col+ 1;
-								MemAddr := MemAddr + X"0001";
+								BuffTempAddr := BuffTempAddr + X"0001";
 							end if;
 
-							-- MemAddr := MemAddr + X"0001";
+							-- memory address
+							MemAddr := MemAddr + X"0001";
 							wordsCount := wordsCount + 1;
 							
                             -- BuffAddr <= wordsCount  -- DONE:
-							if wordsCount = output_size then 
+							if wordsCount = output_size + 1 then 
 								output_saved := 1;
 								wordsCount := 0;
+								row := 0;
+								col := 0;
 								MemAddr := X"0000";
+								BuffTempAddr := X"0000";
 								out_conv <= '0';
 								we <= '0';
 								if current_layer_sig > 0 and feature < max_feature_maps then
@@ -232,7 +249,7 @@ ARCHITECTURE controller2Arc OF controller2 is
 							-- DONE: this was incorrect (now correct)
 							-- input_start_address shouldn't be updated depth update automatical updates the address
 							--depth = depth + 1
-								depth := depth + 1;		--TODO: thing about depth in bigger layers
+								depth := depth + 1;		--TODO: think about depth in bigger layers
 								if current_layer_sig > 0 and depth < max_depth then
 									image_loaded := 0;	
 									temp_input_start_address :=  input_start_address + input_size * depth;
@@ -259,6 +276,8 @@ ARCHITECTURE controller2Arc OF controller2 is
 							else    -- depth is complet
                                 depth := 0;
 								output_saved := 0;
+								row := 0;
+								col := 0;
 								enable_conv <= '0';
 								--store output at MemAddr = output_start_address + output_size*feature
 								temp_output_start_address := output_start_address + output_size*feature;
@@ -296,6 +315,10 @@ ARCHITECTURE controller2Arc OF controller2 is
 								max_feature_maps := max_feature_maps_rom(current_layer_sig);
 								max_depth := max_depth_rom(current_layer_sig);
 								output_saved := 1;	
+								window_input_size := window_input_size_rom(current_layer_sig);
+								window_output_size := window_output_size_rom(current_layer_sig);
+								row := 0;
+								col := 0;
 							
 							elsif image_loaded = 0 then
 								-- read from memory --
@@ -303,14 +326,27 @@ ARCHITECTURE controller2Arc OF controller2 is
 								-- Load Input from MemAddr = input_start_address + input_size * feature 
 								EWB <= '1';
 								MemAddress <= temp_input_start_address + MemAddr ;
-								BuffAddress <= MemAddr;
+								BuffAddress <= BuffTempAddr;
+
+								if col = window_input_size - 1 then
+									col := 0;
+									row := row + 1;
+									BuffTempAddr := std_logic_vector(to_unsigned((row * 32), ADDRESS_SIZE));
+								else
+									col  := col+ 1;
+									BuffTempAddr := BuffTempAddr + X"0001";
+								end if;
+								
 								MemAddr := MemAddr + X"0001";
+								
 								wordsCount := wordsCount + 1;  
-								if wordsCount = input_size then 
+								if wordsCount = input_size + 1 then 
 									EWB <= '0' ;
 									image_loaded := 1;
-									EWF <= '1';
 									MemAddr := X"0000";
+									row := 0;
+									col := 0;
+									BuffTempAddr := X"0000";
 									wordsCount := 0;
 								end if;
 							elsif output_saved = 0 then	--TODO: handle saving
@@ -318,15 +354,29 @@ ARCHITECTURE controller2Arc OF controller2 is
 								out_pool <= '1';
 								-- Load Input from MemAddr = input_start_address + input_size * feature 
 								MemAddress <= temp_output_start_address + MemAddr;
-								PoolAddress <=  MemAddr;
+								PoolAddress <=  BuffTempAddr;
+
+								-- convolution buffer address 
+								if col = window_output_size - 1 then
+									col := 0;
+									row := row + 1;
+									BuffTempAddr := std_logic_vector(to_unsigned((row * 14), ADDRESS_SIZE));
+								else
+									col  := col+ 1;
+									BuffTempAddr := BuffTempAddr + X"0001";
+								end if;
+
 								MemAddr := MemAddr + X"0001";
 								wordsCount := wordsCount + 1;
 							
 								-- BuffAddr <= wordsCount  -- TODO:
-								if wordsCount = output_size then 
+								if wordsCount = output_size +1 then 
 									output_saved := 1;
 									wordsCount := 0;
 									MemAddr := X"0000";
+									row := 0;
+									col := 0;
+									BuffTempAddr := X"0000";
 									out_pool <= '0';
 									we <= '0';	
 									if current_layer_sig > 0 and feature < max_feature_maps then
