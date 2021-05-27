@@ -17,5 +17,5 @@ end entity;
 
 ARCHITECTURE Concat_arc of Concat is
 begin
-result <= arr1 & arr2 & arr3 & arr4 & arr5;
+result <= arr5 & arr4 & arr3 & arr2 & arr1;
 end ARCHITECTURE;

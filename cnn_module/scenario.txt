@@ -43,13 +43,11 @@ if layer_type[current_layer_counter] == 0;
 	For feature = 0 : max_feature_maps;
 		reset_accumulator = 1
 		for depth in max_depth;		// now accumulating the result
-			Load Input from MemAddr = input_start_address + input_size * feature 
-			Load Filter from MemAddr = filter_start_address + max_depth * feature + filter_size(eg. 25)
+			Load Input from MemAddr = input_start_address + input_size * depth 
+			Load Filter from MemAddr = filter_start_address + max_depth * feature + filter_size(eg. 25) * depth 
 			reset_acummulator=0	// has no effect when accumulating
 			enable_convolve=0
 			enalble_convolve = 1
 			enable_convolve=0 // now data in buffers
 			
 		store output at MemAddr = output_start_address + output_size*feature
-	
-	
