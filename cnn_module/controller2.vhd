@@ -109,7 +109,7 @@ ARCHITECTURE controller2Arc OF controller2 is
 			
 			begin 
 
-				if rising_edge(start) or rising_edge(reset) then -- TODO: add reset here
+				if rising_edge(start) or rising_edge(reset) then 
 					--intialization
 						current_layer_sig := 0;
 						feature := 0;
@@ -167,7 +167,7 @@ ARCHITECTURE controller2Arc OF controller2 is
 							else
 								col  := col+ 1;
 								BuffTempAddr := BuffTempAddr + X"0001";
-								end if;
+							end if;
 								
 							-- memory location address	
 							MemAddr := MemAddr + X"0001";
@@ -283,7 +283,7 @@ ARCHITECTURE controller2Arc OF controller2 is
 								temp_output_start_address := output_start_address + output_size*feature;
                                 
 								feature := feature + 1;
-								reset_accumulator <= '1';
+								-- reset_accumulator <= '1';
 							end if;							
 						else    -- feature is maximum
                             feature := 0; --reset featuers
@@ -371,6 +371,7 @@ ARCHITECTURE controller2Arc OF controller2 is
 							
 								-- BuffAddr <= wordsCount  -- TODO:
 								if wordsCount = output_size +1 then 
+									reset_accumulator <= '1';
 									output_saved := 1;
 									wordsCount := 0;
 									MemAddr := X"0000";
@@ -382,7 +383,8 @@ ARCHITECTURE controller2Arc OF controller2 is
 									if current_layer_sig > 0 and feature < max_feature_maps then
 										image_loaded := 0;	
 										temp_input_start_address :=  input_start_address + input_size * depth;
-									end if;								end if;	
+									end if;								
+								end if;	
 							elsif feature < max_feature_maps then
 								
 					

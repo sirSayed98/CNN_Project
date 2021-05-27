@@ -15,7 +15,7 @@ entity ram is
 		dataout : out std_logic_vector(WORDSIZE-1 downto 0)
 		);
 end entity ram;
-
+ 
 ARCHITECTURE syncrama OF ram is
 
 	type ram_type is array(0 TO 2**ADDRESS_SIZE-1) OF std_logic_vector(WORDSIZE-1 downto 0);
