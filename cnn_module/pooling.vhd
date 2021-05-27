@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 Entity pooling is
 	generic(
-		WINDOWSIZE : integer := 3
+		WINDOWSIZE : integer := 2
 	);
 	port(
 	window : in signed(WINDOWSIZE*WINDOWSIZE*16-1 downto 0);
@@ -31,10 +31,11 @@ for i in 0 to WINDOWSIZE*WINDOWSIZE-1 loop
 	end if;
 end loop;
 
-if s = 3 then
-	result := "0"&(result(15)&result(15)&result(15)) & result(15 downto 3);
-else    result := "0"&(result(15)&result(15)&result(15)&result(15)&result(15)) & result(15 downto 5);
-end if;
+--  if s = 3 then
+-- 	result := "0"&(result(15)&result(15)&result(15)) & result(15 downto 3);
+--else
+    result := "0"&(result(15)&result(15)&result(15)&result(15)&result(15)) & result(15 downto 5);
+--end if;
 
 return result(15 downto 0);
 

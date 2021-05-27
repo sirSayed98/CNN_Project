@@ -16,14 +16,14 @@ ARCHITECTURE poolTest_arc of poolTest is
 	    );
     end component;
     -- inputs --
-    signal w : signed(3*3*16-1 downto 0) := (others=>'0');
+    signal w : signed(2*2*16-1 downto 0) := (others=>'0');
     ----------
     -- outputs --
     signal s : signed(15 downto 0);
     -------------
     begin
     -- port mapping --
-    pool : pooling generic map(3) port map
+    pool : pooling generic map(2) port map
     (
         w ,
         s 
@@ -38,7 +38,7 @@ ARCHITECTURE poolTest_arc of poolTest is
     -- window |0.5| 0.5| 0.5|
     --        |0.5| 0.5| 0.5|
     --        |0.5| 0.5| 0.5|
-    w <= "000010000000000000001000000000000000100000000000000010000000000000001000000000000000100000000000000010000000000000001000000000000000100000000000","000001000000000000000100000000000000010000000000000001000000000000000100000000000000010000000000000001000000000000000100000000000000010000000000" after 200 ps;
+    w <= "0000100000000000000010000000000000001000000000000000100000000000","0000010000000000000001000000000000000100000000000000010000000000" after 200 ps;
     -------------
 end ARCHITECTURE;
 
