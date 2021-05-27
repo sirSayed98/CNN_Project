@@ -60,21 +60,22 @@ ARCHITECTURE controller2Arc OF controller2 is
 	signal filter_start_address_rom : small_rom := (1024,0,1174,0,3575);
 	signal max_feature_maps_rom : small_rom := (6,6,16,16,120);
 	signal max_depth_rom : small_rom := (1,0,6,0,16);
-	signal current_layer_sig : integer range 0 to 10 := 0;
+	--signal current_layer_sig : integer range 0 to 4 := 0;
 	
 
-	-- these are the input to convolution and to pooling
+	--these are the input to convolution and to pooling
 	
-	signal input_start_address : integer range 0 to 2**WORDSIZE - 1 := 0; 
-	signal input_size : integer range 0 to 2**WORDSIZE - 1 := 0; -- this is the input of 2D Image or matrix
-	signal output_start_address : integer range 0 to 2**WORDSIZE - 1 := 0; -- this the first place to write to the output
-	signal output_size : integer range 0 to 2**WORDSIZE - 1 := 0; -- the output of 1 feature map convolved
-	signal filter_start_address: integer range 0 to 2**WORDSIZE - 1 := 0; -- the address of the 1st filter
-	signal max_feature_maps : integer range 0 to 2**WORDSIZE - 1 := 0;  -- eg. 16 
-	signal max_depth : integer range 0 to 2**WORDSIZE - 1 := 0;
+	-- signal input_start_address : integer range 0 to 2**WORDSIZE - 1 := 0;  
+	-- signal input_size : integer range 0 to 2**WORDSIZE - 1 := 0; -- this is the input of 2D Image or matrix
+	-- signal output_start_address : integer range 0 to 2**WORDSIZE - 1 := 0; -- this the first place to write to the output
+	-- signal output_size : integer range 0 to 2**WORDSIZE - 1 := 0; -- the output of 1 feature map convolved
+	-- signal filter_start_address: integer range 0 to 2**WORDSIZE - 1 := 0; -- the address of the 1st filter
+	-- signal max_feature_maps : integer range 0 to 2**WORDSIZE - 1 := 0;  -- eg. 16 
+	-- signal max_depth : integer range 0 to 2**WORDSIZE - 1 := 0;
+	--signal initiate : Integer := 0;
 
 	begin 		
-		process (start, clk, reset,  current_layer_sig) is
+		process (start, clk) is
 			variable MemAddr : std_logic_vector(ADDRESS_SIZE-1 downto 0);
 			variable layerCounter : Integer;
 			variable wordsCount : Integer;
@@ -83,16 +84,23 @@ ARCHITECTURE controller2Arc OF controller2 is
 			variable image_loaded : Integer;
 			variable filter_loaded : Integer;
 			variable output_saved : Integer;
-			variable output_done : Integer;
+			variable initiate : Integer;
 			variable temp_input_start_address : integer range 0 to 2**WORDSIZE - 1 := 0; 
 			variable temp_filter_start_address : integer range 0 to 2**WORDSIZE - 1 := 0; 
-			variable temp_output_start_address : integer range 0 to 2**WORDSIZE - 1 := 0; 
-
+			variable temp_output_start_address : integer range 0 to 2**WORDSIZE - 1 := 0;
+			variable input_start_address : integer range 0 to 2**WORDSIZE - 1 := 0;  
+			variable input_size : integer range 0 to 2**WORDSIZE - 1 := 0; -- this is the input of 2D Image or matrix
+			variable output_start_address : integer range 0 to 2**WORDSIZE - 1 := 0; -- this the first place to write to the output
+			variable output_size : integer range 0 to 2**WORDSIZE - 1 := 0; -- the output of 1 feature map convolved
+			variable filter_start_address: integer range 0 to 2**WORDSIZE - 1 := 0; -- the address of the 1st filter
+			variable max_feature_maps : integer range 0 to 2**WORDSIZE - 1 := 0;  -- eg. 16 
+			variable max_depth : integer range 0 to 2**WORDSIZE - 1 := 0;
+			variable current_layer_sig : integer range 0 to 4 := 0;
 			begin 
 
 				if rising_edge(start) or rising_edge(reset) then -- TODO: add reset here
 					--intialization
-						current_layer_sig <= 0;
+						current_layer_sig := 0;
 						feature := 0;
 						depth := 0;	
 						image_loaded := 0;
@@ -103,21 +111,23 @@ ARCHITECTURE controller2Arc OF controller2 is
 						wordsCount := 0;
 						MemAddr := X"0000";
 						done <= '0';
+						initiate := 0;
 						reset_accumulator <= '1';
-						output_done := 0 ;
-				end if;
 
-				if  output_done = 0 and start = '1' and  rising_edge(clk) then					
+ 				elsif start = '1' and  rising_edge(clk)  then					
 					if layer_type_rom(current_layer_sig) = 0 then 
 					--intialization convolution
-						input_start_address <= input_start_address_rom(current_layer_sig);
-						input_size <= input_size_rom(current_layer_sig);
-						output_start_address <= output_start_address_rom(current_layer_sig);
-						output_size <= output_size_rom(current_layer_sig);
-						filter_start_address <= filter_start_address_rom(current_layer_sig);
-						max_feature_maps <= max_feature_maps_rom(current_layer_sig);
-						max_depth <= max_depth_rom(current_layer_sig);
-						if image_loaded = 0 then
+						if initiate = 0 then
+							initiate := 1;
+							input_start_address := input_start_address_rom(current_layer_sig);
+							input_size := input_size_rom(current_layer_sig);
+							output_start_address := output_start_address_rom(current_layer_sig);
+							output_size := output_size_rom(current_layer_sig);
+							filter_start_address := filter_start_address_rom(current_layer_sig);
+							max_feature_maps := max_feature_maps_rom(current_layer_sig);
+							max_depth := max_depth_rom(current_layer_sig);
+						
+						elsif image_loaded = 0 then
 							-- read from memory --
 							we <= '0';
 							-- Load Input from MemAddr = input_start_address + input_size * feature 
@@ -133,9 +143,8 @@ ARCHITECTURE controller2Arc OF controller2 is
 								image_Loaded := 1;
 								EWF <= '1';
 								wordsCount := 0;
-								MemAddr := X"000";
+								MemAddr := X"0000";
 							end if;
-
 						elsif filter_loaded = 0 then
 							EWF <= '1';
 							MemAddress <= temp_filter_start_address + MemAddr ;
@@ -143,11 +152,11 @@ ARCHITECTURE controller2Arc OF controller2 is
 							MemAddr := MemAddr + X"0001";
 							wordsCount := wordsCount + 1;					
 							
-							if wordsCount = 25*25 then 
+							if wordsCount = 5*5 then 
 								EWF <= '0' ;
 								filter_loaded := 1;
 						 		wordsCount := 0;
-								MemAddr := X"000";
+								MemAddr := X"0000";
 							end if;
 						elsif output_saved = 0 then	--DONE: handle saving
 							we <= '1';
@@ -167,21 +176,25 @@ ARCHITECTURE controller2Arc OF controller2 is
 								we <= '0';
 
 							end if;
-						end if; 
-						if feature < max_feature_maps and output_saved = 1 and image_loaded = 1 and filter_loaded = 1 then
+						elsif feature < max_feature_maps then
 							--reset_accumulator = 1
-							if depth < max_depth then		
+							if (depth) < max_depth then		
 							--to read another input--------------------
-							
+							-- change input image with depth or with feature?
 							-- DONE: this was incorrect (now correct)
 							-- input_start_address shouldn't be updated depth update automatical updates the address
-								image_loaded := 0;	
-								temp_input_start_address :=  input_start_address + input_size * depth;
-								
+							--depth = depth + 1
+								depth := depth + 1;
+								if current_layer_sig > 0 and depth+1 < max_depth then
+									image_loaded := 0;	
+									temp_input_start_address :=  input_start_address + input_size * depth;
+								end if;
 								---------------------------------------------
 								---------------to read another	filter ---------------
-								filter_loaded := 0;	
-								temp_filter_start_address :=  filter_start_address + feature * max_depth +25 * depth;
+								if depth+1 < max_depth then
+									filter_loaded := 0;	
+									temp_filter_start_address :=  filter_start_address + feature * max_depth +25 * depth;
+								end if;
 								--filter_start_address	<= filter_start_address + max_depth * feature + filter_size(eg. 25)
 							-----------------------------------------------------------------------
 								-- reset_acummulator=0	// has no effect when accumulating
@@ -196,7 +209,7 @@ ARCHITECTURE controller2Arc OF controller2 is
 								enable_conv <=  '1';
 								
 								--depth = depth + 1
-								depth := depth + 1;
+								--depth := depth + 1;
 							else    -- depth is complet
                                 depth := 0;
 								output_saved := 0;
@@ -211,83 +224,83 @@ ARCHITECTURE controller2Arc OF controller2 is
                             feature := 0; --reset featuers
 							 --current_layer_counter+=1
                              -- TODO handle max feature
-                             current_layer_sig <= current_layer_sig + 1;
-                             if current_layer_sig = total_layer_count then
-                                output_done := 1;
-								done <= '1'; -- now computation is done
+                            current_layer_sig := current_layer_sig + 1;
+							initiate := 0;
+                            if current_layer_sig = total_layer_count then
+                                done <= '1'; -- now computation is done
                             else
                                 done <= '0';
-                                output_done := 0;
                             end if;
 						end if;
-						-- Pooling Handling
-					elsif layer_type_rom(current_layer_sig) = 1 then
-							--intialize pooling
-							input_start_address <= input_start_address_rom(current_layer_sig);
-							input_size <= input_size_rom(current_layer_sig);
-							output_start_address <= output_start_address_rom(current_layer_sig);
-							output_size <= output_size_rom(current_layer_sig);
-							filter_start_address <= filter_start_address_rom(current_layer_sig);
-							max_feature_maps <= max_feature_maps_rom(current_layer_sig);
-							max_depth <= max_depth_rom(current_layer_sig);
-							if image_loaded = 0 then
-								-- read from memory --
-								we <= '0';
-								-- Load Input from MemAddr = input_start_address + input_size * feature 
-								EWB <= '1';
-								MemAddress <= temp_input_start_address + MemAddr ;
-								MemAddr := MemAddr + X"0001";
-								wordsCount := wordsCount + 1;  
-								if wordsCount = input_size then 
-									EWB <= '0' ;
-									image_loaded := 1;
-									EWF <= '1';
-									wordsCount := 0;
-								end if;
-							elsif output_saved = 0 then	--TODO: handle saving
-								we <= '1';
-								out_pool <= '1';
-								-- Load Input from MemAddr = input_start_address + input_size * feature 
-								MemAddress <= temp_output_start_address + MemAddr;
-								PoolAddress <=  MemAddr;
-								MemAddr := MemAddr + X"0001";
-								wordsCount := wordsCount + 1;
-							
-								-- BuffAddr <= wordsCount  -- TODO:
-								if wordsCount = output_size then 
-									output_saved := 1;
-									wordsCount := 0;
-									MemAddr := X"0000";
-									out_pool <= '0';
-									we <= '0';	
-								end if;	
-
-							end if;
-
-							if feature < max_feature_maps and image_loaded = 1 then
-								-- if need to read another input use image_loaded = 0
-								image_loaded := 0;									
-								-- Load Input from MemAddr = input_start_address + input_size * feature 
-								temp_input_start_address :=  input_start_address + input_size * feature;
-								-- OUT_POOL=1
-								out_pool <= '1';
-								-- store output at MemAddr = output_start_address + output_size*feature
-								output_saved := 0;
-								temp_output_start_address := output_start_address + output_size*feature;
-								-- OUT_POOL = 0
-								out_pool <= '0';
-							else
-								feature := 0; --reset featuers
-								--current_layer_counter+=1
-								-- TODO handle max feature
-								current_layer_sig <= current_layer_sig + 1;
-								if current_layer_sig = total_layer_count then
-									done <= '1'; -- now computation is done
-						   		else
-									done <= '0';
-						   		end if;
-							end if;
 					end if;
+-- 						-- Pooling Handling
+-- 					elsif layer_type_rom(current_layer_sig) = 1 then
+-- 							--intialize pooling
+-- 							input_start_address <= input_start_address_rom(current_layer_sig);
+-- 							input_size <= input_size_rom(current_layer_sig);
+-- 							output_start_address <= output_start_address_rom(current_layer_sig);
+-- 							output_size <= output_size_rom(current_layer_sig);
+-- 							filter_start_address <= filter_start_address_rom(current_layer_sig);
+-- 							max_feature_maps <= max_feature_maps_rom(current_layer_sig);
+-- 							max_depth <= max_depth_rom(current_layer_sig);
+-- 							if image_loaded = 0 then
+-- 								-- read from memory --
+-- 								we <= '0';
+-- 								-- Load Input from MemAddr = input_start_address + input_size * feature 
+-- 								EWB <= '1';
+-- 								MemAddress <= temp_input_start_address + MemAddr ;
+-- 								MemAddr := MemAddr + X"0001";
+-- 								wordsCount := wordsCount + 1;  
+-- 								if wordsCount = input_size then 
+-- 									EWB <= '0' ;
+-- 									image_loaded := 1;
+-- 									EWF <= '1';
+-- 									wordsCount := 0;
+-- 								end if;
+-- 							elsif output_saved = 0 then	--TODO: handle saving
+-- 								we <= '1';
+-- 								out_pool <= '1';
+-- 								-- Load Input from MemAddr = input_start_address + input_size * feature 
+-- 								MemAddress <= temp_output_start_address + MemAddr;
+-- 								PoolAddress <=  MemAddr;
+-- 								MemAddr := MemAddr + X"0001";
+-- 								wordsCount := wordsCount + 1;
+							
+-- 								-- BuffAddr <= wordsCount  -- TODO:
+-- 								if wordsCount = output_size then 
+-- 									output_saved := 1;
+-- 									wordsCount := 0;
+-- 									MemAddr := X"0000";
+-- 									out_pool <= '0';
+-- 									we <= '0';	
+-- 								end if;	
+
+-- 							end if;
+
+-- 							if feature < max_feature_maps and image_loaded = 1 then
+-- 								-- if need to read another input use image_loaded = 0
+-- 								image_loaded := 0;									
+-- 								-- Load Input from MemAddr = input_start_address + input_size * feature 
+-- 								temp_input_start_address :=  input_start_address + input_size * feature;
+-- 								-- OUT_POOL=1
+-- 								out_pool <= '1';
+-- 								-- store output at MemAddr = output_start_address + output_size*feature
+-- 								output_saved := 0;
+-- 								temp_output_start_address := output_start_address + output_size*feature;
+-- 								-- OUT_POOL = 0
+-- 								out_pool <= '0';
+-- 							else
+-- 								feature := 0; --reset featuers
+-- 								--current_layer_counter+=1
+-- 								-- TODO handle max feature
+-- 								current_layer_sig <= current_layer_sig + 1;
+-- 								if current_layer_sig = total_layer_count then
+-- 									done <= '1'; -- now computation is done
+-- 						   		else
+-- 									done <= '0';
+-- 						   		end if;
+-- 							end if;
+-- 					end if;
 				end if;
 		end process;
 end controller2Arc;
