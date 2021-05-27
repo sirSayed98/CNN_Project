@@ -10,89 +10,96 @@ use IEEE.std_logic_unsigned.all;
 
  Entity controller is 
 		generic(
-		WORDSIZE : integer := 16;
 		ADDRESS_SIZE : integer := 16
 		);
 		port(
 		start : in std_logic;
 		clk : in std_logic;
-		datain  : in  std_logic_vector(WORDSIZE-1 downto 0);
-		convResult : in signed(WORDSIZE-1 downto 0);
-		poolResult: in signed(WORDSIZE-1 downto 0);
 		we : out std_logic;
-		address : out  std_logic_vector(ADDRESS_SIZE-1 downto 0);
-		dataout : out std_logic_vector(WORDSIZE-1 downto 0);
-		filter : out signed(WORDSIZE*5*5-1 downto 0);
-		image_window : out signed(WORDSIZE*5*5-1 downto 0)
+		EWF : out std_logic;
+		EWB : out std_logic;
+		out_conv : out std_logic;
+		enable_conv : out std_logic;
+		out_pool : out std_logic;
+		reset_Accumlator : out std_logic;
+		filterAddress : out  std_logic_vector(ADDRESS_SIZE-1 downto 0);
+		BuffAddress : out  std_logic_vector(ADDRESS_SIZE-1 downto 0);
+		MemAddress : out  std_logic_vector(ADDRESS_SIZE-1 downto 0);
+		ConvAddress : out std_logic_vector(ADDRESS_SIZE-1 downto 0);
+		PoolAddress : out  std_logic_vector(ADDRESS_SIZE-1 downto 0)
 		);
 end entity;
 
 ARCHITECTURE controllerArc OF controller is
-	signal conv_buffer : signed(WORDSIZE*28*28-1 downto 0);
-	signal img_buffer : signed(WORDSIZE*32*32-1 downto 0);
-	signal pool_buffer : signed(WORDSIZE*14*14-1 downto 0);
-
+	--signal conv_buffer : signed(WORDSIZE*28*28-1 downto 0);
+	--signal img_buffer : signed(WORDSIZE*32*32-1 downto 0);
+	--signal pool_buffer : signed(WORDSIZE*14*14-1 downto 0);
 	begin 
+		
 		process (start, clk) is
-			variable layerCounter : signed(2 downto 0);
-			variable depthCounter : signed(4 downto 0);
-			variable filterCounter : signed(7 downto 0);
-			variable wordCount : signed(15 downto 0); 	-- number of words to read
-			variable mem_address : std_logic_vector(15 downto 0); 	-- number of words to read
-			variable iLoaded : std_logic;	-- image loaded or not
-			variable fLoaded : std_logic;	-- filters loaded or not
-			variable index : integer;
-			variable temp : integer;
-			begin
-				if rising_edge(start) then
-					-- Initialization
-					layerCounter := (others => '0');
-					depthCounter := (others => '0');
-					filterCounter := (others => '0');
-					wordCount := to_signed(32*32, 16);
-					mem_address :=  (others => '0');
-					
-					iLoaded := '0';
-					fLoaded := '0';
-					address <= x"00";
-					index := 0;
+			variable c : Integer;
+			variable MemAddr : std_logic_vector(ADDRESS_SIZE-1 downto 0);
+			variable BuffAddr : std_logic_vector(ADDRESS_SIZE-1 downto 0);
+			variable filterAddr : std_logic_vector(ADDRESS_SIZE-1 downto 0);
+			variable ConvAddr : std_logic_vector(ADDRESS_SIZE-1 downto 0);
+			variable PoolAddr : std_logic_vector(ADDRESS_SIZE-1 downto 0);
+			variable layerCounter : Integer;
+			variable wordsCount : Integer;
+			variable img_loaded : Integer;
+			variable filter_loaded : Integer;
+			begin 
+				if rising_edge(start) then 
+					--intialization
+					c := 0;
+					Layercounter := 0;
+					wordsCount := 0;
+					MemAddr := (others=>'0');
+					BuffAddr := (others=>'0');
+					filterAddr := (others=>'0');
+					ConvAddr := (others=>'0');
+					PoolAddr := (others=>'0');
+					MemAddress <= MemAddr;
+					BuffAddress <= BuffAddr;
+					filterAddress <= filterAddr;
+					ConvAddress  <= ConvAddr;
+					PoolAddress  <= PoolAddr;
+					EWB <= '1';
+					EWF <= '0';
+					out_conv <= '0';
+					we <= '0';
+					enable_conv <= '0';
+					out_pool <= '0';
+					reset_Accumlator <= '1';
+					img_loaded := 0;
+					filter_loaded := 0;
 				end if;
-					
 				if rising_edge(clk) then
-					if Layercounter = O"0" then
-						if  iLoaded = '0' then   
-							img_buffer((1 + index) * 16 - 1 downto index * 16)  <= signed(datain);
-							index := index + 1;
-							mem_address := mem_address + 1;
-							address <= mem_address;
-							if index = wordCount then
-								iLoaded := '1';
-								wordCount := to_signed(25, 16);
-								-- Assumed filter is after image
-								index := 0;
-							end if;
-						elsif fLoaded = '0' then
-							filter((1 + index) * 16 - 1 downto index * 16)  <= signed(datain);
-							index := index +1;
-							mem_address := mem_address + 1;
-							address <= mem_address;
-							if index = wordCount then
-								fLoaded := '1';
-								wordCount := to_signed(25, 16);
-								-- Assumed filter is after image
-								index := 0;
-								end if;
-						else 
-							image_window <= img_buffer((1 + index) * 16*5*5 - 1 downto index *16*5*5);
-							conv_buffer((1 + index)*16-1 downto index*16) <= convResult;
-							index := index + 1;
+					-- layer 0 --
+					if wordsCount < 1024 and img_loaded = 0 then
+						-- load image --
+						MemAddr := MemAddr + X"0001";
+						BuffAddr := BuffAddr + X"0001";
+						MemAddress <= MemAddr;
+						BuffAddress <= BuffAddr;
+						wordsCount := wordsCount + 1;
+						if 	wordsCount = 1024 then
+							img_loaded := 1;
+							EWF <= '1';
+							EWB <= '0';
+							wordsCount := 0;
 						end if;
-					end if;
-					
-					-- load the image
-					-- load filters 
-					-- convolve 
-					-- save result
+					elsif img_loaded = 1 and filter_loaded = 0 then
+						MemAddr := MemAddr + X"0001";
+						filterAddr := filterAddr + X"0001";
+						MemAddress <= MemAddr;
+						filterAddress <= filterAddr;
+						wordsCount := wordsCount + 1;
+						if wordsCount = 25 then
+							filter_loaded := 1;
+							EWF <= '0';
+							wordsCount := 0;
+						end if;
+					end if;  		
 				end if;
-			end process;
+		end process;
 end controllerArc;
