@@ -15,6 +15,7 @@ module DMA #(
     output enFC
 );
 //---------------regs of X and W and B----------------
+/*
 reg [WORD_SIZE-1 : 0] X_reg [IP_LAYER1_SIZE-1 : 0];
 reg [WORD_SIZE-1 : 0] W_Layer1_reg [OP_LAYER1_SIZE-1 : 0][IP_LAYER1_SIZE-1 : 0];
 reg [WORD_SIZE-1 : 0] B_Layer1_reg [OP_LAYER1_SIZE-1 : 0];
@@ -39,5 +40,5 @@ assign B_Layer1 =  B_Layer1_reg;
 assign W_Layer2 =  W_Layer2_reg;  
 assign B_Layer2 =  B_Layer2_reg;  
 assign enFC = 1;
-    
+*/
 endmodule

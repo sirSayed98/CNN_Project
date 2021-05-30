@@ -79,7 +79,7 @@ ARCHITECTURE controller2Arc OF controller2 is
 	--signal initiate : Integer := 0;
 
 	begin 		
-		process (start, clk) is
+		process (start, clk, reset) is
 			variable MemAddr : std_logic_vector(ADDRESS_SIZE-1 downto 0);
 			variable BuffTempAddr : std_logic_vector(ADDRESS_SIZE-1 downto 0);
 			variable layerCounter : Integer;

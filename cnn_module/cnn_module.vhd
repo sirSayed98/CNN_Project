@@ -34,6 +34,7 @@ architecture system_arch of system is
   component reg is
     generic (WORDSIZE : integer := 32);
     port (
+	  reset : in std_logic;
       clk : in std_logic;
       en  : in std_logic;
       d   : in signed(WORDSIZE - 1 downto 0);
@@ -53,7 +54,7 @@ architecture system_arch of system is
     );
   end component;
 
-  component controller2 is
+  component controller is
     generic (
       ADDRESS_SIZE : integer := 16
     );
@@ -166,7 +167,7 @@ begin
   -- RAM component --
   Ram_comp_lbl : ram generic map(WORDSIZE, ADDRESS_SIZE) port map(clk, we, MemAddress, outdata, indata);
   -- controller component--
-  Control_lbl : controller2 generic map(ADDRESS_SIZE) port map(start, clk, reset, we, EWF, EWB, out_conv, enable_conv, out_pool, done, reset_Accumulator, filterAddress, BuffAddress, MemAddress, ConvAddress, PoolAddress);
+  Control_lbl : controller generic map(ADDRESS_SIZE) port map(start, clk, reset, we, EWF, EWB, out_conv, enable_conv, out_pool, done, reset_Accumulator, filterAddress, BuffAddress, MemAddress, ConvAddress, PoolAddress);
   -- Image Buffer component--
   Img_Buffer_lbl : Buff generic map(WORDSIZE, 32, ADDRESS_SIZE) port map(signed(BuffAddress), signed(indata), EWB, clk, imgdata);
   -- Filter Buffer component--
@@ -187,7 +188,7 @@ begin
         conv_input_concatination((i * 28 + j + 1) *25* 16 - 1 downto (i * 28 + j) *25* 16), convResult(28 * i + j));--index of convResult
       --(i * 28 + j + 1) * 16 - 1 downto (i * 28 + j) * 16)
       reg1_lbl : reg generic map(
-      16) port map(clk, enable_conv, adder_result(i * 28 + j), reg_to_adder(i * 28 + j));
+      16) port map(reset_Accumulator, clk, enable_conv, adder_result(i * 28 + j), reg_to_adder(i * 28 + j));
 
       addr_lbl : ripple_adder generic map(16) port map(convResult(i*28+j), 
 	  reg_to_adder(i*28+j), adder_carry(i*28+j downto i*28+j), adder_result(i*28+j), adder_carry(i*28+j downto i*28+j));
@@ -200,22 +201,22 @@ begin
   else (others => 'Z');-- convolution buffer address 
 
        
---   Pool_REG :
---   for row in 0 to (28-2)/2 generate -- varies from 0 to 13
---     B :
---     for col in 0 to (28-2)/2 generate -- varies from 0 to 13
---       concat_pool_input_lbl : Concat2x2 port map(
---         imgdata((((row*2) * 32 + (col*2) + 2) * 16) - 1 downto ((row*2) * 32 + (col*2)) * 16),          
---         imgdata((((row*2+1) * 32 + (col*2) + 2) * 16) - 1 downto ((row*2+1) * 32 + (col*2)) * 16),                  
---         pool_input_concatination(((row*2) * 14 + col*2 + 1) * 4 * 16 - 1 downto ((row*2) * 14 + col*2) * 4 * 16));
+  Pool_REG :
+  for row in 0 to (28-2)/2 generate -- varies from 0 to 13
+    B :
+    for col in 0 to (28-2)/2 generate -- varies from 0 to 13
+      concat_pool_input_lbl : Concat2x2 generic map (16) port map(
+        imgdata((((row*2) * 32 + (col*2) + 2) * 16) - 1 downto ((row*2) * 32 + (col*2)) * 16),          
+        imgdata((((row*2+1) * 32 + (col*2) + 2) * 16) - 1 downto ((row*2+1) * 32 + (col*2)) * 16),                  
+        pool_input_concatination(((row) * 14 + col + 1) * 4 * 16 - 1 downto ((row) * 14 + col) * 4 * 16));
 
---         pool_result_lbl : pooling  generic map(2) port map( 
---                 pool_input_concatination(((row*2) * 14 + col*2 + 1) * 4 * 16 - 1 downto ((row*2) * 14 + col*2) * 4 * 16)
---               , poolResult(14 * row + col)
---               );
+        pool_result_lbl : pooling  generic map(2) port map( 
+                pool_input_concatination(((row) * 14 + col + 1) * 4 * 16 - 1 downto ((row) * 14 + col) * 4 * 16)
+              , poolResult(14 * row + col)
+              );
         
---     end generate B;
---   end generate Pool_REG;
+    end generate B;
+  end generate Pool_REG;
  	     
 
   outdata <= std_logic_vector(poolResult(to_integer(unsigned(PoolAddress)))) when out_pool = '1'
