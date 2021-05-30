@@ -265,11 +265,9 @@ ARCHITECTURE controller2Arc OF controller2 is
 								-- reset_acummulator=0	// has no effect when accumulating
 								
 								-- DONE: signals are only update at the end of process
-								reset_accumulator <=  '0';
-								
+								reset_accumulator <=  '0';								
 								-- enable_convolve= 0
-								enable_conv <=  '0';
-								
+								enable_conv <=  '0';						
 								
 								--depth = depth + 1
 								--depth := depth + 1;
@@ -296,7 +294,7 @@ ARCHITECTURE controller2Arc OF controller2 is
 								tmp_done := '1';
                             else
                                 done <= '0';
-								tmp_done := '0';
+								   := '0';
                             end if;
 						end if;
 					end if;

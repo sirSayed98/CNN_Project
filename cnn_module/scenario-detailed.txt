@@ -1,9 +1,21 @@
 layers = [0,1,2,3,4]
 * IMMEDIATE_START_ADDRESS= 3575 + 16 * 120 * 5 * 5 = 51575
 * layer_type_rom = [0,1,0,1,0] // 0 Convolution 1 Pooling
-* input_start_address_rom = [0,IMMEDIATE_START_ADDRESS,IMMEDIATE_START_ADDRESS+784*1,IMMEDIATE_START_ADDRESS+784+196*6,IMMEDIATE_START_ADDRESS+1960+16*100,IMMEDIATE_START_ADDRESS+3560+25 ] 
+* input_start_address_rom = [
+	0,	-- input of conv
+	IMMEDIATE_START_ADDRESS , -- input to pool
+	IMMEDIATE_START_ADDRESS + 784*6, -- input to conv
+	IMMEDIATE_START_ADDRESS + 784*6+196*6,	-- input to  pool 
+	IMMEDIATE_START_ADDRESS + 784*6+196*6+16*100 -- input to conv
+] 
 * input_size_rom = [1024,784,14*14,100,5*5] 
-* output_start_address_rom = [IMMEDIATE_START_ADDRESS,IMMEDIATE_START_ADDRESS+784*1,IMMEDIATE_START_ADDRESS+784+196*6,IMMEDIATE_START_ADDRESS+1960+16*100,IMMEDIATE_START_ADDRESS+3560+25 ] 
+* output_start_address_rom = [
+	IMMEDIATE_START_ADDRESS , -- conv reads from
+	IMMEDIATE_START_ADDRESS +784*6, -- pooling start write
+	IMMEDIATE_START_ADDRESS +784*6+196*6,-- convolution start write
+	IMMEDIATE_START_ADDRESS +784*6+196*6+16*100,-- convolution start write
+	IMMEDIATE_START_ADDRESS +784*6+196*6+16*100+ 25 * 16
+] 
 * output_size_rom = [784,14*14=196,100,5*5,1] 
 * filter_start_address_rom = [1024,*,1174,*,3575] 
 * max_feature_maps_rom = [6,6,16,16,120] eg. 16 

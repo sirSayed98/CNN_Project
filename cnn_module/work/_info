@@ -1,0 +1,642 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dD:/3rd-year-2nd semster/VLSI/project/CNN_Project/cnn_module
+T_opt
+!s110 1622137223
+VP;LibiH]Tg^T=o@_RF30@3
+04 6 11 work system system_arch 1
+=1-c85b7695ae72-60afd906-39b-9d40
+o-quiet -auto_acc_if_foreign -work work
+tCvgOpt 0
+n@_opt
+OL;O;10.5;63
+Ebuff
+Z0 w1622136114
+Z1 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+Z2 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z3 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
+Z4 dD:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module
+Z5 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/Buffer.vhd
+Z6 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/Buffer.vhd
+l0
+L6
+VA^RJEfY0iR8mUjLHcAkU:0
+!s100 a9n:HXN699Mf^cO0hTmXE1
+Z7 OL;C;10.5;63
+32
+Z8 !s110 1622136448
+!i10b 1
+Z9 !s108 1622136448.000000
+Z10 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/Buffer.vhd|
+Z11 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/Buffer.vhd|
+!i113 0
+Z12 o-work work -2002 -explicit
+Z13 tExplicit 1 CvgOpt 0
+Asipo
+R1
+R2
+R3
+DEx4 work 4 buff 0 22 A^RJEfY0iR8mUjLHcAkU:0
+l24
+L22
+V]7z_H57=Od4UBb5Y@HdM:3
+!s100 V[]K>kTnj=``Mf@z7G]CV1
+R7
+32
+R8
+!i10b 1
+R9
+R10
+R11
+!i113 0
+R12
+R13
+Econcat
+R0
+R1
+R2
+R3
+R4
+Z14 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/Concat.vhd
+Z15 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/Concat.vhd
+l0
+L4
+VeVeGg[cCVkS9Y_>VII[Xz0
+!s100 SAE?2Q>096cFOBJD1=I0a1
+R7
+32
+Z16 !s110 1622136449
+!i10b 1
+Z17 !s108 1622136449.000000
+Z18 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/Concat.vhd|
+Z19 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/Concat.vhd|
+!i113 0
+R12
+R13
+Aconcat_arc
+R1
+R2
+R3
+DEx4 work 6 concat 0 22 eVeGg[cCVkS9Y_>VII[Xz0
+l19
+L18
+VYg<>Hdc<lP0DCkM;<1ikf3
+!s100 bDP:?IGjY7k]fN3>fkQAL3
+R7
+32
+R16
+!i10b 1
+R17
+R18
+R19
+!i113 0
+R12
+R13
+Econcat2x2
+R0
+R1
+R2
+R3
+R4
+Z20 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/Concat2x2.vhd
+Z21 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/Concat2x2.vhd
+l0
+L5
+VkOmd^lUMXo6AQQA=mC[L20
+!s100 DdzngJJ`>h?G5bF9I`HPL2
+R7
+32
+R16
+!i10b 1
+R17
+Z22 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/Concat2x2.vhd|
+Z23 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/Concat2x2.vhd|
+!i113 0
+R12
+R13
+Aconcat2x2_arc
+R1
+R2
+R3
+DEx4 work 9 concat2x2 0 22 kOmd^lUMXo6AQQA=mC[L20
+l17
+L16
+V3g6P`j__T<aoZX0DGV<YA3
+!s100 4Vb3<74dI:]W<oU_QDk0R2
+R7
+32
+R16
+!i10b 1
+R17
+R22
+R23
+!i113 0
+R12
+R13
+Econtroller
+R0
+Z24 DPx4 ieee 15 std_logic_arith 0 22 [G314=:2zXJ`VORJe1J@Z1
+Z25 DPx4 ieee 18 std_logic_unsigned 0 22 ;eZjO2D4ZDz<]0>8AL<ne1
+R1
+R2
+R3
+R4
+Z26 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/controller.vhd
+Z27 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/controller.vhd
+l0
+L11
+VIcm>B_CB@h_QdzibIY2Uc3
+!s100 I<fnNn>?aF6U8MJlSaTk61
+R7
+32
+R16
+!i10b 1
+R17
+Z28 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/controller.vhd|
+Z29 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/controller.vhd|
+!i113 0
+R12
+R13
+Acontrollerarc
+R24
+R25
+R1
+R2
+R3
+DEx4 work 10 controller 0 22 Icm>B_CB@h_QdzibIY2Uc3
+l37
+L33
+V_bRz>i@HLX9:a]Vfe5EXi0
+!s100 k<HjOm`V??KjmZ>I[>Gf@3
+R7
+32
+R16
+!i10b 1
+R17
+R28
+R29
+!i113 0
+R12
+R13
+Econtroller2
+R0
+R24
+R25
+R1
+R2
+R3
+R4
+Z30 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/controller2.vhd
+Z31 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/controller2.vhd
+l0
+L6
+VW03g83FOzC?1AKNe:]BUJ3
+!s100 [H73c`I91I>Qj9O[TA`QF0
+R7
+32
+Z32 !s110 1622136450
+!i10b 1
+R17
+Z33 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/controller2.vhd|
+Z34 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/controller2.vhd|
+!i113 0
+R12
+R13
+Acontroller2arc
+R24
+R25
+R1
+R2
+R3
+DEx4 work 11 controller2 0 22 W03g83FOzC?1AKNe:]BUJ3
+l81
+L33
+V94AkAUQYJM?UGNARiJ]5X0
+!s100 6E29fjI>haJ7`:nELh1GJ2
+R7
+32
+R32
+!i10b 1
+R17
+R33
+R34
+!i113 0
+R12
+R13
+Econvolution
+R0
+R1
+R2
+R3
+R4
+Z35 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/convolution.vhd
+Z36 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/convolution.vhd
+l0
+L4
+VFBj;GTn;lNijlP_dEQ_cZ2
+!s100 E194?:``5Jj:1XO4<V[Z:0
+R7
+32
+R32
+!i10b 1
+Z37 !s108 1622136450.000000
+Z38 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/convolution.vhd|
+Z39 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/convolution.vhd|
+!i113 0
+R12
+R13
+Aconvolution_arc
+R1
+R2
+R3
+DEx4 work 11 convolution 0 22 FBj;GTn;lNijlP_dEQ_cZ2
+l48
+L15
+VFjdZOz8O^26mo5zejCXgS0
+!s100 2=7;7djzl@oLUizonFDnb1
+R7
+32
+R32
+!i10b 1
+R37
+R38
+R39
+!i113 0
+R12
+R13
+Econvolutiontest
+R0
+R1
+R2
+R3
+R4
+Z40 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/convolutionTest.vhd
+Z41 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/convolutionTest.vhd
+l0
+L4
+VGAX<Em]]F60PZoBzHVazB1
+!s100 <2FX?0TPN`Y]AOFL4nmIk0
+R7
+32
+R32
+!i10b 1
+R37
+Z42 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/convolutionTest.vhd|
+Z43 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/convolutionTest.vhd|
+!i113 0
+R12
+R13
+Aconvolutiontest_arc
+R1
+R2
+R3
+DEx4 work 15 convolutiontest 0 22 GAX<Em]]F60PZoBzHVazB1
+l25
+L7
+V>WAQLJL6S3n4J@R35L7k90
+!s100 YN`Pjn9KPk2ojdaZAm;fn2
+R7
+32
+R32
+!i10b 1
+R37
+R42
+R43
+!i113 0
+R12
+R13
+Efull_adder
+R0
+R1
+R2
+R3
+R4
+Z44 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/full_adder.vhd
+Z45 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/full_adder.vhd
+l0
+L5
+V8B<D8K5YV=h89T1z[;T`X2
+!s100 59JE>;BYHAQojQg[lg=eW2
+R7
+32
+Z46 !s110 1622136451
+!i10b 1
+R37
+Z47 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/full_adder.vhd|
+Z48 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/full_adder.vhd|
+!i113 0
+R12
+R13
+Afull_adder_0
+R1
+R2
+R3
+DEx4 work 10 full_adder 0 22 8B<D8K5YV=h89T1z[;T`X2
+l11
+L10
+VNkJ6h;Z>[iHWf2W_7^Y0B3
+!s100 K<iMie9g[b[0@MaQ?[]P72
+R7
+32
+R46
+!i10b 1
+R37
+R47
+R48
+!i113 0
+R12
+R13
+Epooling
+R0
+R1
+R2
+R3
+R4
+Z49 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/pooling.vhd
+Z50 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/pooling.vhd
+l0
+L4
+VflKe0YLA[m]VJDC14_XRR3
+!s100 Y`Ec2Pna_bJj^F5zONC2;0
+R7
+32
+R46
+!i10b 1
+Z51 !s108 1622136451.000000
+Z52 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/pooling.vhd|
+Z53 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/pooling.vhd|
+!i113 0
+R12
+R13
+Apool_arc
+R1
+R2
+R3
+DEx4 work 7 pooling 0 22 flKe0YLA[m]VJDC14_XRR3
+l45
+L14
+VA:BFgNlRlSa4^TlINfk5R3
+!s100 <APS:3_9fScPMXlKQ5N;W1
+R7
+32
+R46
+!i10b 1
+R51
+R52
+R53
+!i113 0
+R12
+R13
+Epooltest
+R0
+R1
+R2
+R3
+R4
+Z54 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/poolTest.vhd
+Z55 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/poolTest.vhd
+l0
+L5
+V8J8?O1S`dzmPY3L50VG=N3
+!s100 4eE^X]PZ];h:<J06::kH62
+R7
+32
+R46
+!i10b 1
+R51
+Z56 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/poolTest.vhd|
+Z57 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/poolTest.vhd|
+!i113 0
+R12
+R13
+Apooltest_arc
+R1
+R2
+R3
+DEx4 work 8 pooltest 0 22 8J8?O1S`dzmPY3L50VG=N3
+l24
+L8
+VQVIS^9oAo7=_jL5VP]EOk1
+!s100 BA25]h<T^A=[_i`UA=Ei<3
+R7
+32
+R46
+!i10b 1
+R51
+R56
+R57
+!i113 0
+R12
+R13
+Eram
+R0
+R1
+R2
+R3
+R4
+Z58 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/ram.vhd
+Z59 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/ram.vhd
+l0
+L5
+V8R?mMNK<o:mZ7Yf8OOX1h0
+!s100 B?QH0EN1zA8SDY]fc8LCS2
+R7
+32
+R46
+!i10b 1
+R51
+Z60 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/ram.vhd|
+Z61 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/ram.vhd|
+!i113 0
+R12
+R13
+Asyncrama
+R1
+R2
+R3
+DEx4 work 3 ram 0 22 8R?mMNK<o:mZ7Yf8OOX1h0
+l24
+L19
+VG_YG5FYXJ[bYhI154]`;V2
+!s100 eOV=6^Io>bA0Q7MXaN]MD0
+R7
+32
+R46
+!i10b 1
+R51
+R60
+R61
+!i113 0
+R12
+R13
+Ereg
+R0
+R1
+R2
+R3
+R4
+Z62 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/register.vhd
+Z63 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/register.vhd
+l0
+L5
+Vn;Oj3ma]EZmSZkVdd<U`I2
+!s100 ING]ehiJbKHh]o:?G;4;E3
+R7
+32
+R46
+!i10b 1
+R51
+Z64 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/register.vhd|
+Z65 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/register.vhd|
+!i113 0
+R12
+R13
+Areg_1
+R1
+R2
+R3
+DEx4 work 3 reg 0 22 n;Oj3ma]EZmSZkVdd<U`I2
+l16
+L15
+VOaU2oiVFdNM;DR3J[Uh[Y2
+!s100 jC6QKg47f`>I]kI2Q6:?k2
+R7
+32
+R46
+!i10b 1
+R51
+R64
+R65
+!i113 0
+R12
+R13
+Eresbuff
+R0
+R1
+R2
+R3
+R4
+Z66 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/resultBuffer.vhd
+Z67 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/resultBuffer.vhd
+l0
+L6
+Vg6L7=KDg:m4;c^:dJ;nZ:2
+!s100 kMom3]S^SW`RPYlL>PRE=1
+R7
+32
+Z68 !s110 1622136452
+!i10b 1
+Z69 !s108 1622136452.000000
+Z70 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/resultBuffer.vhd|
+Z71 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/resultBuffer.vhd|
+!i113 0
+R12
+R13
+Apipo
+R1
+R2
+R3
+DEx4 work 7 resbuff 0 22 g6L7=KDg:m4;c^:dJ;nZ:2
+l23
+L21
+VWb<5lkSd^1oIhO8d9MP;j0
+!s100 dWE5PnTU578^Tib:2zQgI3
+R7
+32
+R68
+!i10b 1
+R69
+R70
+R71
+!i113 0
+R12
+R13
+Eripple_adder
+R0
+R1
+R2
+R3
+R4
+Z72 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/ripple_adder.vhd
+Z73 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/ripple_adder.vhd
+l0
+L5
+V0e53^=[d2f_JD9MX?eSZ10
+!s100 E7]D:gM<mAATAgF9Aa2Lg0
+R7
+32
+R8
+!i10b 1
+Z74 !s108 1622136447.000000
+Z75 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/ripple_adder.vhd|
+Z76 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/ripple_adder.vhd|
+!i113 0
+R12
+R13
+Aripple_adder_0
+R1
+R2
+R3
+DEx4 work 12 ripple_adder 0 22 0e53^=[d2f_JD9MX?eSZ10
+l30
+L18
+VRB^GlDM3nLYKk?==jC3n^0
+!s100 87<MmC_hoNQDf[gIj0TCh2
+R7
+32
+R8
+!i10b 1
+R74
+R75
+R76
+!i113 0
+R12
+R13
+Esystem
+R0
+R1
+R2
+R3
+R4
+Z77 8D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/cnn_module.vhd
+Z78 FD:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/cnn_module.vhd
+l0
+L6
+Vk>LWP=<7WmO4NYN[_0>Yd3
+!s100 ^Vnc[HSeI9[:3h4EMC_4O1
+R7
+32
+R16
+!i10b 1
+R17
+Z79 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/cnn_module.vhd|
+Z80 !s107 D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/cnn_module.vhd|
+!i113 0
+R12
+R13
+Asystem_arch
+R1
+R2
+R3
+DEx4 work 6 system 0 22 k>LWP=<7WmO4NYN[_0>Yd3
+l165
+L20
+V?A;X<7?O_T@;aG4X>IN371
+!s100 ghFLaOD]RBhTYY3Vc8VX]2
+R7
+32
+R16
+!i10b 1
+R17
+R79
+R80
+!i113 0
+R12
+R13
