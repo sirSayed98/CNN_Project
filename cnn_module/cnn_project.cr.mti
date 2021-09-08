@@ -1,24 +1,4 @@
-{D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/controller2.vhd} {1 {vcom -work work -2002 -explicit -vopt -stats=none {D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/controller2.vhd}
-Model Technology ModelSim SE-64 vcom 10.5 Compiler 2016.02 Feb 13 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Loading package std_logic_arith
--- Loading package STD_LOGIC_UNSIGNED
--- Compiling entity controller2
--- Compiling architecture controller2Arc of controller2
-
-} {} {}} {D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/ram.vhd} {1 {vcom -work work -2002 -explicit -vopt -stats=none {D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/ram.vhd}
-Model Technology ModelSim SE-64 vcom 10.5 Compiler 2016.02 Feb 13 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Compiling entity ram
--- Compiling architecture syncrama of ram
-
-} {} {}} {D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/Concat.vhd} {1 {vcom -work work -2002 -explicit -vopt -stats=none {D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/Concat.vhd}
+{D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/Concat.vhd} {1 {vcom -work work -2002 -explicit -vopt -stats=none {D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/Concat.vhd}
 Model Technology ModelSim SE-64 vcom 10.5 Compiler 2016.02 Feb 13 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -63,15 +43,6 @@ Model Technology ModelSim SE-64 vcom 10.5 Compiler 2016.02 Feb 13 2016
 -- Compiling entity ripple_adder
 -- Compiling architecture ripple_adder_0 of ripple_adder
 
-} {} {}} {D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/register.vhd} {1 {vcom -work work -2002 -explicit -vopt -stats=none {D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/register.vhd}
-Model Technology ModelSim SE-64 vcom 10.5 Compiler 2016.02 Feb 13 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Compiling entity reg
--- Compiling architecture reg_1 of reg
-
 } {} {}} {D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/convolution.vhd} {1 {vcom -work work -2002 -explicit -vopt -stats=none {D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/convolution.vhd}
 Model Technology ModelSim SE-64 vcom 10.5 Compiler 2016.02 Feb 13 2016
 -- Loading package STANDARD
@@ -108,15 +79,6 @@ Model Technology ModelSim SE-64 vcom 10.5 Compiler 2016.02 Feb 13 2016
 -- Compiling entity full_adder
 -- Compiling architecture full_adder_0 of full_adder
 
-} {} {}} {D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/cnn_module.vhd} {1 {vcom -work work -2002 -explicit -vopt -stats=none {D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/cnn_module.vhd}
-Model Technology ModelSim SE-64 vcom 10.5 Compiler 2016.02 Feb 13 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Compiling entity system
--- Compiling architecture system_arch of system
-
 } {} {}} {D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/Concat2x2.vhd} {1 {vcom -work work -2002 -explicit -vopt -stats=none {D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/Concat2x2.vhd}
 Model Technology ModelSim SE-64 vcom 10.5 Compiler 2016.02 Feb 13 2016
 -- Loading package STANDARD
@@ -125,16 +87,5 @@ Model Technology ModelSim SE-64 vcom 10.5 Compiler 2016.02 Feb 13 2016
 -- Loading package NUMERIC_STD
 -- Compiling entity Concat2x2
 -- Compiling architecture Concat2x2_arc of Concat2x2
-
-} {} {}} {D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/controller.vhd} {1 {vcom -work work -2002 -explicit -vopt -stats=none {D:/3rd-year-2nd semster/VLSI/project/CNN_Project_2/cnn_module/controller.vhd}
-Model Technology ModelSim SE-64 vcom 10.5 Compiler 2016.02 Feb 13 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Loading package std_logic_arith
--- Loading package STD_LOGIC_UNSIGNED
--- Compiling entity controller
--- Compiling architecture controllerArc of controller
 
 } {} {}}
